@@ -1,11 +1,5 @@
-DOM Query Component
-=====================
+<?php
 
-The purpose of this component is to provide a jQuery-like interface for crawling XML and HTML documents.
-
-Example use :
-
-```php
 $H = \PowerTools\DOM_Query::loadHTML(file_get_contents($path));
 
 $data = array(
@@ -40,10 +34,3 @@ $H->select('body')
        ->text($data['content']));
 
 echo $H;
-```
-
-## Author
-
-| [![twitter/johnslegers](https://en.gravatar.com/avatar/bf4cc94221382810233575862875e687?s=70)](http://twitter.com/johnslegers "Follow @johnslegers on Twitter") |
-|---|
-| [John slegers](http://www.johnslegers.com/) |
