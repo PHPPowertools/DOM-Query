@@ -1,6 +1,6 @@
 <?php
 
-define("LOCAL_PATH_BOOTSTRAP", __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap');
+define("LOCAL_PATH_BOOTSTRAP", __DIR__);
 require LOCAL_PATH_BOOTSTRAP . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 
