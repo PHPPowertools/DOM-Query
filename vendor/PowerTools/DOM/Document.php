@@ -69,7 +69,7 @@ namespace PowerTools;
 
 use \Symfony\Component\CssSelector\CssSelector as CssSelector;
 
-class DOM extends \DOMDocument {
+class DOM_Document extends \DOMDocument {
 
     protected $_isHTML = false;
 

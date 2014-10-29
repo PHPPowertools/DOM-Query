@@ -67,7 +67,7 @@
 
 namespace PowerTools;
 
-class XML extends DOM {
+class DOM_XML extends DOM_Document {
 
     protected $_isHTML = false;
 

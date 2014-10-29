@@ -16,7 +16,7 @@
  *               DESCRIPTION :
  *
  *               A library for easy selection, crawling and
- *               modification of HTML and XML.
+ *               modification of DOM_ and XML.
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -66,17 +66,6 @@
 
 namespace PowerTools;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Query
- *
- * @author john
- */
 class DOM_Query {
 
     public $DOM;
@@ -94,10 +83,10 @@ class DOM_Query {
     public function __construct($source, $isHtml = true) {
         if (is_string($source)) {
             if ($isHtml) {
-                $this->DOM = new HTML($source);
+                $this->DOM = new DOM_HTML($source);
                 $this->isHtml = true;
             } else {
-                $this->DOM = new XML($source);
+                $this->DOM = new DOM_XML($source);
                 $this->isHtml = false;
             }
         } else {
@@ -114,7 +103,7 @@ class DOM_Query {
         if ($this->nodes === array(null)) {
             return '';
         } else {
-            $newdoc = new HTML();
+            $newdoc = new DOM_HTML();
             foreach ($this->nodes as $value) {
                 $newdoc->appendChild($newdoc->importNode($value->cloneNode(TRUE), TRUE));
             }
@@ -272,7 +261,7 @@ class DOM_Query {
     public function parseHTML($newdoc) {
         // http://api.jquery.com/jQuery.parseHTML/
         if (is_string($newdoc)) {
-            $newdoc = new HTML('<html><body>' . $newdoc . '</body></html>');
+            $newdoc = new DOM_HTML('<html><body>' . $newdoc . '</body></html>');
         }
         $vals = $newdoc->querySelector('body')->childNodes;
         $ret = array();
@@ -289,7 +278,7 @@ class DOM_Query {
 
     public function parseXML($string) {
         // http://api.jquery.com/jQuery.parseXML/
-        $newdoc = new XML('<root>' . $string . '</root>');
+        $newdoc = new DOM_XML('<root>' . $string . '</root>');
         $vals = $newdoc->childNodes->item(0)->childNodes;
         $ret = array();
         foreach ($vals as $i => $c) {
