@@ -18,7 +18,7 @@
     "target-dir": "PowerTools/DOM",
     "autoload": {
         "psr-0": {
-            "PowerTools\\DOM": ""
+            "PowerTools\\DOM": "vendor/PowerTools/DOM"
         }
     }
 }
