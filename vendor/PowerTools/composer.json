@@ -1,0 +1,24 @@
+{
+    "name": "powertools/dom-query",
+    "type": "library",
+    "description": "PHP PowerTools DOM-Query Component",
+    "homepage": "https://github.com/PHPPowertools/DOM-Query",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "John Slegers",
+            "email": "slegersjohn@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "symfony/css-selector": "2.*"
+    },
+    "target-dir": "PowerTools/DOM",
+    "autoload": {
+        "psr-0": {
+            "PowerTools\\DOM": ""
+        }
+    }
+}
