@@ -1,5 +1,4 @@
 <?php
-
 namespace Masterminds\HTML5\Parser;
 
 use Masterminds\HTML5\Elements;
@@ -22,16 +21,21 @@ use Masterminds\HTML5\Elements;
  * re-written to accomodate this. See, for example, the Go language HTML5
  * parser.
  */
-class DOMTreeBuilder implements EventHandler {
-
+class DOMTreeBuilder implements EventHandler
+{
     /**
      * Defined in http://www.w3.org/TR/html51/infrastructure.html#html-namespace-0
      */
     const NAMESPACE_HTML = 'http://www.w3.org/1999/xhtml';
+
     const NAMESPACE_MATHML = 'http://www.w3.org/1998/Math/MathML';
+
     const NAMESPACE_SVG = 'http://www.w3.org/2000/svg';
+
     const NAMESPACE_XLINK = 'http://www.w3.org/1999/xlink';
+
     const NAMESPACE_XML = 'http://www.w3.org/XML/1998/namespace';
+
     const NAMESPACE_XMLNS = 'http://www.w3.org/2000/xmlns/';
 
     /**
@@ -74,36 +78,64 @@ class DOMTreeBuilder implements EventHandler {
      * Defined in 8.2.5.
      */
     const IM_INITIAL = 0;
+
     const IM_BEFORE_HTML = 1;
+
     const IM_BEFORE_HEAD = 2;
+
     const IM_IN_HEAD = 3;
+
     const IM_IN_HEAD_NOSCRIPT = 4;
+
     const IM_AFTER_HEAD = 5;
+
     const IM_IN_BODY = 6;
+
     const IM_TEXT = 7;
+
     const IM_IN_TABLE = 8;
+
     const IM_IN_TABLE_TEXT = 9;
+
     const IM_IN_CAPTION = 10;
+
     const IM_IN_COLUMN_GROUP = 11;
+
     const IM_IN_TABLE_BODY = 12;
+
     const IM_IN_ROW = 13;
+
     const IM_IN_CELL = 14;
+
     const IM_IN_SELECT = 15;
+
     const IM_IN_SELECT_IN_TABLE = 16;
+
     const IM_AFTER_BODY = 17;
+
     const IM_IN_FRAMESET = 18;
+
     const IM_AFTER_FRAMESET = 19;
+
     const IM_AFTER_AFTER_BODY = 20;
+
     const IM_AFTER_AFTER_FRAMESET = 21;
+
     const IM_IN_SVG = 22;
+
     const IM_IN_MATHML = 23;
 
     protected $options = array();
+
     protected $stack = array();
+
     protected $current; // Pointer in the tag hierarchy.
     protected $doc;
+
     protected $frag;
+
     protected $processor;
+
     protected $insertMode = 0;
 
     /**
@@ -112,9 +144,11 @@ class DOMTreeBuilder implements EventHandler {
      * DT will be considered to be in quirks mode.
      */
     protected $quirks = true;
+
     protected $errors = array();
 
-    public function __construct($isFragment = false, array $options = array()) {
+    public function __construct($isFragment = false, array $options = array())
+    {
         $this->options = $options;
 
         if (isset($options['target'])) {
@@ -131,13 +165,14 @@ class DOMTreeBuilder implements EventHandler {
         $this->errors = array();
 
         $this->current = $this->doc; // ->documentElement;
+
         // Create a rules engine for tags.
         $this->rules = new TreeBuildingRules($this->doc);
 
         // Fill $nsStack with the defalut HTML5 namespaces, plus the "implicitNamespaces" array taken form $options
         array_unshift($this->nsStack, (isset($this->options["implicitNamespaces"]) ? $this->options["implicitNamespaces"] : array()) + array(
             '' => self::NAMESPACE_HTML
-                ) + $this->implicitNamespaces);
+        ) + $this->implicitNamespaces);
 
         if ($isFragment) {
             $this->insertMode = static::IM_IN_BODY;
@@ -149,7 +184,8 @@ class DOMTreeBuilder implements EventHandler {
     /**
      * Get the document.
      */
-    public function document() {
+    public function document()
+    {
         return $this->doc;
     }
 
@@ -163,7 +199,8 @@ class DOMTreeBuilder implements EventHandler {
      *
      * @return \DOMFragmentDocumentFragment
      */
-    public function fragment() {
+    public function fragment()
+    {
         return $this->frag;
     }
 
@@ -173,11 +210,13 @@ class DOMTreeBuilder implements EventHandler {
      * This is used for handling Processor Instructions as they are
      * inserted. If omitted, PI's are inserted directly into the DOM tree.
      */
-    public function setInstructionProcessor(\Masterminds\HTML5\InstructionProcessor $proc) {
+    public function setInstructionProcessor(\Masterminds\HTML5\InstructionProcessor $proc)
+    {
         $this->processor = $proc;
     }
 
-    public function doctype($name, $idType = 0, $id = null, $quirks = false) {
+    public function doctype($name, $idType = 0, $id = null, $quirks = false)
+    {
         // This is used solely for setting quirks mode. Currently we don't
         // try to preserve the inbound DT. We convert it to HTML5.
         $this->quirks = $quirks;
@@ -198,12 +237,13 @@ class DOMTreeBuilder implements EventHandler {
      *       - XLink, MathML and SVG namespace handling
      *       - Omission rules: 8.1.2.4 Optional tags
      */
-    public function startTag($name, $attributes = array(), $selfClosing = false) {
+    public function startTag($name, $attributes = array(), $selfClosing = false)
+    {
         // fprintf(STDOUT, $name);
         $lname = $this->normalizeTagName($name);
 
         // Make sure we have an html element.
-        if (!$this->doc->documentElement && $name !== 'html' && !$this->frag) {
+        if (! $this->doc->documentElement && $name !== 'html' && ! $this->frag) {
             $this->startTag('html');
         }
 
@@ -262,7 +302,7 @@ class DOMTreeBuilder implements EventHandler {
         if (isset($this->nsRoots[$lname]) && $this->nsStack[0][''] !== $this->nsRoots[$lname]) {
             array_unshift($this->nsStack, array(
                 '' => $this->nsRoots[$lname]
-                    ) + $this->nsStack[0]);
+            ) + $this->nsStack[0]);
             $pushes ++;
         }
         $needsWorkaround = false;
@@ -273,12 +313,12 @@ class DOMTreeBuilder implements EventHandler {
                     $needsWorkaround = $aVal;
                     array_unshift($this->nsStack, array(
                         '' => $aVal
-                            ) + $this->nsStack[0]);
+                    ) + $this->nsStack[0]);
                     $pushes ++;
                 } elseif ((($pos = strpos($aName, ':')) ? substr($aName, 0, $pos) : '') === 'xmlns') {
                     array_unshift($this->nsStack, array(
                         substr($aName, $pos + 1) => $aVal
-                            ) + $this->nsStack[0]);
+                    ) + $this->nsStack[0]);
                     $pushes ++;
                 }
             }
@@ -288,14 +328,15 @@ class DOMTreeBuilder implements EventHandler {
             $prefix = ($pos = strpos($lname, ':')) ? substr($lname, 0, $pos) : '';
 
 
-            if ($needsWorkaround !== false) {
+            if ($needsWorkaround!==false) {
 
-                $xml = "<$lname xmlns=\"$needsWorkaround\" " . (strlen($prefix) && isset($this->nsStack[0][$prefix]) ? ("xmlns:$prefix=\"" . $this->nsStack[0][$prefix] . "\"") : "") . "/>";
+                $xml = "<$lname xmlns=\"$needsWorkaround\" ".(strlen($prefix) && isset($this->nsStack[0][$prefix])?("xmlns:$prefix=\"".$this->nsStack[0][$prefix]."\""):"")."/>";
 
                 $frag = new \DOMDocument('1.0', 'UTF-8');
                 $frag->loadXML($xml);
 
                 $ele = $this->doc->importNode($frag->documentElement, true);
+
             } else {
                 if (!isset($this->nsStack[0][$prefix]) || ($prefix === "" && $this->options['implicitHtmlNamespace'])) {
                     $ele = $this->doc->createElement($lname);
@@ -303,6 +344,7 @@ class DOMTreeBuilder implements EventHandler {
                     $ele = $this->doc->createElementNS($this->nsStack[0][$prefix], $lname);
                 }
             }
+
         } catch (\DOMException $e) {
             $this->parseError("Illegal tag name: <$lname>. Replaced with <invalid>.");
             $ele = $this->doc->createElement('invalid');
@@ -337,9 +379,9 @@ class DOMTreeBuilder implements EventHandler {
             try {
                 $prefix = ($pos = strpos($aName, ':')) ? substr($aName, 0, $pos) : false;
 
-                if ($prefix === 'xmlns') {
+                if ($prefix==='xmlns') {
                     $ele->setAttributeNs(self::NAMESPACE_XMLNS, $aName, $aVal);
-                } elseif ($prefix !== false && isset($this->nsStack[0][$prefix])) {
+                } elseif ($prefix!==false && isset($this->nsStack[0][$prefix])) {
                     $ele->setAttributeNs($this->nsStack[0][$prefix], $aName, $aVal);
                 } else {
                     $ele->setAttribute($aName, $aVal);
@@ -363,7 +405,7 @@ class DOMTreeBuilder implements EventHandler {
             $this->current->appendChild($ele);
 
             // XXX: Need to handle self-closing tags and unary tags.
-            if (!Elements::isA($name, Elements::VOID_TAG)) {
+            if (! Elements::isA($name, Elements::VOID_TAG)) {
                 $this->current = $ele;
             }
         }
@@ -387,7 +429,8 @@ class DOMTreeBuilder implements EventHandler {
         return Elements::element($name);
     }
 
-    public function endTag($name) {
+    public function endTag($name)
+    {
         $lname = $this->normalizeTagName($name);
 
         // Ignore closing tags for unary elements.
@@ -398,11 +441,11 @@ class DOMTreeBuilder implements EventHandler {
         if ($this->insertMode <= static::IM_BEFORE_HTML) {
             // 8.2.5.4.2
             if (in_array($name, array(
-                        'html',
-                        'br',
-                        'head',
-                        'title'
-                    ))) {
+                'html',
+                'br',
+                'head',
+                'title'
+            ))) {
                 $this->startTag('html');
                 $this->endTag($name);
                 $this->insertMode = static::IM_BEFORE_HEAD;
@@ -432,6 +475,7 @@ class DOMTreeBuilder implements EventHandler {
         // if ($name != $lname) {
         // return $this->quirksTreeResolver($lname);
         // }
+
         // XXX: HTML has no parent. What do we do, though,
         // if this element appears in the wrong place?
         if ($lname == 'html') {
@@ -446,7 +490,7 @@ class DOMTreeBuilder implements EventHandler {
             unset($this->pushes[$cid]);
         }
 
-        if (!$this->autoclose($lname)) {
+        if (! $this->autoclose($lname)) {
             $this->parseError('Could not find closing tag for ' . $lname);
         }
 
@@ -465,13 +509,15 @@ class DOMTreeBuilder implements EventHandler {
         }
     }
 
-    public function comment($cdata) {
+    public function comment($cdata)
+    {
         // TODO: Need to handle case where comment appears outside of the HTML tag.
         $node = $this->doc->createComment($cdata);
         $this->current->appendChild($node);
     }
 
-    public function text($data) {
+    public function text($data)
+    {
         // XXX: Hmmm.... should we really be this strict?
         if ($this->insertMode < static::IM_IN_HEAD) {
             // Per '8.2.5.4.3 The "before head" insertion mode' the characters
@@ -479,7 +525,7 @@ class DOMTreeBuilder implements EventHandler {
             // practical as most documents contain these characters. Other text is not
             // expected here so recording a parse error is necessary.
             $dataTmp = trim($data, " \t\n\r\f");
-            if (!empty($dataTmp)) {
+            if (! empty($dataTmp)) {
                 // fprintf(STDOUT, "Unexpected insert mode: %d", $this->insertMode);
                 $this->parseError("Unexpected text. Ignoring: " . $dataTmp);
             }
@@ -491,24 +537,29 @@ class DOMTreeBuilder implements EventHandler {
         $this->current->appendChild($node);
     }
 
-    public function eof() {
+    public function eof()
+    {
         // If the $current isn't the $root, do we need to do anything?
     }
 
-    public function parseError($msg, $line = 0, $col = 0) {
+    public function parseError($msg, $line = 0, $col = 0)
+    {
         $this->errors[] = sprintf("Line %d, Col %d: %s", $line, $col, $msg);
     }
 
-    public function getErrors() {
+    public function getErrors()
+    {
         return $this->errors;
     }
 
-    public function cdata($data) {
+    public function cdata($data)
+    {
         $node = $this->doc->createCDATASection($data);
         $this->current->appendChild($node);
     }
 
-    public function processingInstruction($name, $data = null) {
+    public function processingInstruction($name, $data = null)
+    {
         // XXX: Ignore initial XML declaration, per the spec.
         if ($this->insertMode == static::IM_INITIAL && 'xml' == strtolower($name)) {
             return;
@@ -518,7 +569,7 @@ class DOMTreeBuilder implements EventHandler {
         // it sees fit.
         if (isset($this->processor)) {
             $res = $this->processor->process($this->current, $name, $data);
-            if (!empty($res)) {
+            if (! empty($res)) {
                 $this->current = $res;
             }
 
@@ -544,21 +595,24 @@ class DOMTreeBuilder implements EventHandler {
      *            The tag name.
      * @return string The normalized tag name.
      */
-    protected function normalizeTagName($name) {
+    protected function normalizeTagName($name)
+    {
         /*
          * Section 2.9 suggests that we should not do this. if (strpos($name, ':') !== false) { // We know from the grammar that there must be at least one other // char besides :, since : is not a legal tag start. $parts = explode(':', $name); return array_pop($parts); }
          */
         return $name;
     }
 
-    protected function quirksTreeResolver($name) {
+    protected function quirksTreeResolver($name)
+    {
         throw new \Exception("Not implemented.");
     }
 
     /**
      * Automatically climb the tree and close the closest node with the matching $tag.
      */
-    protected function autoclose($tag) {
+    protected function autoclose($tag)
+    {
         $working = $this->current;
         do {
             if ($working->nodeType != XML_ELEMENT_NODE) {
@@ -579,7 +633,8 @@ class DOMTreeBuilder implements EventHandler {
      * If $this->current or anything above $this->current matches the given tag
      * name, this returns true.
      */
-    protected function isAncestor($tagname) {
+    protected function isAncestor($tagname)
+    {
         $candidate = $this->current;
         while ($candidate->nodeType === XML_ELEMENT_NODE) {
             if ($candidate->tagName == $tagname) {
@@ -594,8 +649,8 @@ class DOMTreeBuilder implements EventHandler {
     /**
      * Returns true if the immediate parent element is of the given tagname.
      */
-    protected function isParent($tagname) {
+    protected function isParent($tagname)
+    {
         return $this->current->tagName == $tagname;
     }
-
 }
