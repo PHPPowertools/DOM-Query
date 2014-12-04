@@ -1,5 +1,6 @@
 <?php
 
+
 /* !
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -17,7 +18,7 @@
  *               DESCRIPTION :
  *
  *               A library for easy selection, crawling and
- *               modification of HTML and XML.
+ *               modification of DOM_ and XML.
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -54,8 +55,8 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- *  @category  Autoloader
- *  @package   /
+ *  @category  DOM Selection
+ *  @package   DOM-Query
  *  @author    John Slegers
  *  @copyright MMXIV John Slegers
  *  @license   http://www.opensource.org/licenses/mit-license.html MIT License
@@ -77,7 +78,7 @@ class DOM_Document extends \DOMDocument {
         if ($data && $data != '') {
             if ($doctype) {
                 if ($doctype === 'html') {
-                    $this->loadHTML('<!DOCTYPE html><html><meta charset="' . $encoding . '"></html>');
+                    $this->loadHTML('<!DOCTYPE html><html><head><meta charset="' . $encoding . '"><head></html>');
                     @$this->loadHTML($data);
                 } else {
                     $this->loadXML('<?xml version="' . $version . '" encoding="' . $encoding . '"?><!DOCTYPE ' . $doctype . '><' . $doctype . '></' . $doctype . '>');

@@ -54,8 +54,8 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- *  @category  Autoloader
- *  @package   /
+ *  @category  DOM Crawling
+ *  @package   DOM-Query
  *  @author    John Slegers
  *  @copyright MMXIV John Slegers
  *  @license   http://www.opensource.org/licenses/mit-license.html MIT License
@@ -650,25 +650,7 @@ class DOM_Query {
     }
 
     public function parent($selector = false) {
-    // http://api.jquery.com/parent/
-    return $this->select($this->_runGetter($this, '_getValue', 'parentNode', false));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        // http://api.jquery.com/parent/
+        return $this->select($this->_runGetter($this, '_getValue', 'parentNode', false));
     }
-
 }

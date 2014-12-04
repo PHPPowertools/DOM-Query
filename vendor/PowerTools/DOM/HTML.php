@@ -1,4 +1,5 @@
 <?php
+
 /* !
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -16,7 +17,7 @@
  *               DESCRIPTION :
  *
  *               A library for easy selection, crawling and
- *               modification of HTML and XML.
+ *               modification of DOM_ and XML.
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -53,8 +54,8 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- *  @category  Autoloader
- *  @package   /
+ *  @category  DOM Selection
+ *  @package   DOM-Query
  *  @author    John Slegers
  *  @copyright MMXIV John Slegers
  *  @license   http://www.opensource.org/licenses/mit-license.html MIT License
