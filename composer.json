@@ -13,7 +13,8 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "symfony/css-selector": "2.*"
+        "symfony/css-selector": "2.*",
+        "PHPPowertools/html5-php": "2.*"
     },
     "target-dir": "PowerTools/DOM",
     "autoload": {
