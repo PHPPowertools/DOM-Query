@@ -78,7 +78,7 @@ class DOM_Document extends \DOMDocument {
         if ($data && $data != '') {
             if ($doctype) {
                 if ($doctype === 'html') {
-                    $this->loadHTML('<!DOCTYPE html><html><head><meta charset="' . $encoding . '"><head></html>');
+                    $this->loadHTML('<!DOCTYPE html><html><head><meta charset="' . $encoding . '"></head></html>');
                     @$this->loadHTML($data);
                 } else {
                     $this->loadXML('<?xml version="' . $version . '" encoding="' . $encoding . '"?><!DOCTYPE ' . $doctype . '><' . $doctype . '></' . $doctype . '>');
