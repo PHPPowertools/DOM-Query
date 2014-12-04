@@ -21,5 +21,10 @@
         "psr-0": {
             "PowerTools\\DOM": "vendor/PowerTools/DOM"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.1-dev"
+        }
     }
 }
