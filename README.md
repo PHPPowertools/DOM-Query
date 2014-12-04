@@ -124,6 +124,7 @@ $sitefooter->wrap('<section><div class="footer-wrapper"></div></section>');
 - [x] [$selection.text](http://api.jquery.com/text/)
 - [x] [$selection.wrap](http://api.jquery.com/wrap/)
 
+-----
 
 1. *Renamed 'select', for obvious reasons*
 2. *Renamed 'void', since 'empty' is a reserved word in PHP*
