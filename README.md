@@ -6,40 +6,32 @@ The purpose of this component is to provide a jQuery-like interface for crawling
 Example use :
 
 ```php
-$H = \PowerTools\DOM_Query::loadHTML(file_get_contents($path));
+// Select the body tag
+$body = $H->select('body');
 
-$data = array(
-   'meta' => json_decode(file_get_contents('meta.json')),
-   'menu' => Menu::build(),
-   'content' => Page::content()
-);
+// Select all elements with at least one of the following for classes
+$siteblocks = $body->select('.site-header, .masthead, .site-body, .site-footer');
 
-$H->select('head')
-  ->append(
-     $H->select('<link rel="shortcut icon" type="image/x-icon">')
-       ->attr(array('href' => $data['meta']->favicon)))
-  ->append(
-     $H->select('<title />')
-       ->text($data['meta']->title))
-  ->append(
-     $H->select('<meta  name="description" />')
-       ->attr(array('content' => $data['meta']->description)))
-  ->append(
-     $H->select('<meta />')
-       ->attr(array('charset' => $data['meta']->charset)))
-  ->append(
-     $H->select('<meta  name="viewport" />')
-       ->attr(array('content' => $data['meta']->viewport)));
+// Set the text of selected elements to the return value of the lambda function
+$siteblocks->text(function( $i, $val) {
+    return $i . " - " . $val->attr('class');
+});
 
-$H->select('body')
-  ->append(
-     $H->select('<div class="menu" />')
-       ->text($data['menu']))
-  ->append(
-     $H->select('<div class="content" />')
-       ->text($data['content']));
+// Appen the following HTML to the selected elements
+$siteblocks->append('<div class="site-center"></div>');
 
-echo $H;
+// Set attributes of selected elements by assigning an array of values
+$sitefooter->attr(array('id' => 'aweeesome', 'data-val' => 'see'));
+
+// Set the attributes of selected elements to the return value of the lambda function
+$siteblocks->attr('data-val', function( $i, $val) {
+    return $i . " - " . $val->attr('class') . " - photo by Kelly Clark";
+});
+
+// Select the parents of selected elements
+$parents = $siteblocks->parent();
+
+[...]
 ```
 
 ## Author
