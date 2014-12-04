@@ -55,37 +55,39 @@ $sitefooter->wrap('<section><div class="footer-wrapper"></div></section>');
 
 ## Supported methods :
 
-- [x] [add](http://api.jquery.com/add/)
-- [x] [addClass](http://api.jquery.com/addClass/)
-- [x] [after](http://api.jquery.com/after/)
-- [x] [append](http://api.jquery.com/append/)
-- [x] [attr](http://api.jquery.com/attr/)
-- [x] [before](http://api.jquery.com/before/)
-- [x] [children](http://api.jquery.com/children/)
-- [x] [closest](http://api.jquery.com/closest/)
-- [x] [contents](http://api.jquery.com/contents/)
-- [x] [detach](http://api.jquery.com/detach/)
-- [x] [each](http://api.jquery.com/each/)
-- [x] [eq](http://api.jquery.com/eq/)
-- [x] [empty](http://api.jquery.com/empty/) *(1)*
-- [x] [find](http://api.jquery.com/find/)
-- [x] [first](http://api.jquery.com/first/)
-- [x] [get](http://api.jquery.com/get/)
-- [x] [insertAfter](http://api.jquery.com/insertAfter/)
-- [x] [insertBefore](http://api.jquery.com/insertBefore/)
-- [x] [last](http://api.jquery.com/last/)
-- [x] [parent](http://api.jquery.com/parent/)
-- [x] [parents](http://api.jquery.com/parents/)
-- [x] [remove](http://api.jquery.com/remove/)
-- [x] [removeAttr](http://api.jquery.com/removeAttr/)
-- [x] [removeClass](http://api.jquery.com/removeClass/)
-- [x] [text](http://api.jquery.com/text/)
-- [x] [wrap](http://api.jquery.com/wrap/)
-- [x] [parseHTML](http://api.jquery.com/jQuery.parseHTML/)
-- [x] [parseXML](http://api.jquery.com/jQuery.parseXML/)
-- [x] [parseJSON](http://api.jquery.com/jQuery.parseJSON/)
+- [x] [$](http://api.jquery.com/jQuery/) *(1)*
+- [x] [$.parseHTML](http://api.jquery.com/jQuery.parseHTML/)
+- [x] [$.parseXML](http://api.jquery.com/jQuery.parseXML/)
+- [x] [$.parseJSON](http://api.jquery.com/jQuery.parseJSON/)
+- [x] [$selection.add](http://api.jquery.com/add/)
+- [x] [$selection.addClass](http://api.jquery.com/addClass/)
+- [x] [$selection.after](http://api.jquery.com/after/)
+- [x] [$selection.append](http://api.jquery.com/append/)
+- [x] [$selection.attr](http://api.jquery.com/attr/)
+- [x] [$selection.before](http://api.jquery.com/before/)
+- [x] [$selection.children](http://api.jquery.com/children/)
+- [x] [$selection.closest](http://api.jquery.com/closest/)
+- [x] [$selection.contents](http://api.jquery.com/contents/)
+- [x] [$selection.detach](http://api.jquery.com/detach/)
+- [x] [$selection.each](http://api.jquery.com/each/)
+- [x] [$selection.eq](http://api.jquery.com/eq/)
+- [x] [$selection.empty](http://api.jquery.com/empty/) *(2)*
+- [x] [$selection.find](http://api.jquery.com/find/)
+- [x] [$selection.first](http://api.jquery.com/first/)
+- [x] [$selection.get](http://api.jquery.com/get/)
+- [x] [$selection.insertAfter](http://api.jquery.com/insertAfter/)
+- [x] [$selection.insertBefore](http://api.jquery.com/insertBefore/)
+- [x] [$selection.last](http://api.jquery.com/last/)
+- [x] [$selection.parent](http://api.jquery.com/parent/)
+- [x] [$selection.parents](http://api.jquery.com/parents/)
+- [x] [$selection.remove](http://api.jquery.com/remove/)
+- [x] [$selection.removeAttr](http://api.jquery.com/removeAttr/)
+- [x] [$selection.removeClass](http://api.jquery.com/removeClass/)
+- [x] [$selection.text](http://api.jquery.com/text/)
+- [x] [$selection.wrap](http://api.jquery.com/wrap/)
 
-*1. Since 'empty' is a reserved word in PHP, this method is named 'void'.*
+*1. Renamed 'select', for obvious reasons*
+*2. Renamed 'void', since 'empty' is a reserved word in PHP*
 
 
 
