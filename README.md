@@ -6,9 +6,47 @@
 
 The purpose of this component is to provide a ***[jQuery](http://jquery.com/)***-like interface for crawling XML and HTML documents. Under the hood, it uses ***[symfony/CssSelector](https://github.com/symfony/CssSelector)*** for converting ***[CSS selectors](http://www.w3.org/TR/CSS/)*** to ***[XPath queries](http://www.w3.org/TR/xpath/)***
 
+-----
 
+##### The jQuery way :
+```js
+// Define your DOMCrawler
+$ = jQuery;
 
-## Example use :
+// Passing a string (CSS selector)
+$s = $( 'div.foo' );
+
+// Passing an element object (DOM Element)
+$s = $( document.body );
+
+// Passing a jQuery object
+$s = $( $('p + p') );
+```
+##### The DOM-Query way :
+```php
+namespace PowerTools;
+
+// Get file content
+$htmlcode = file_get_contents( 'https://github.com' );
+
+// Define your DOMCrawler based on file string
+$H = new DOM_Query( $htmlcode );
+
+// Define your DOMCrawler based on an existing DOM_Query instance
+$H = new DOM_Query( $H->select('body') );
+
+// Passing a string (CSS selector)
+$s = $H->select( 'div.foo' );
+
+// Passing an element object (DOM Element)
+$s = $H->select( $documentBody );
+
+// Passing a DOM Query object
+$s = $H->select( $H->select('p + p') );
+```
+-----
+
+##### Example use :
 
 ```php
 // Select the body tag
@@ -31,7 +69,7 @@ $siteblocks->append('<div class="site-center"></div>');
 // Use a descendant selector to select the site's footer
 $sitefooter = $body->select('.site-footer > .site-center');
 
-// Set attributes of the site's footer
+// Set some attributes for the site's footer
 $sitefooter->attr(array('id' => 'aweeesome', 'data-val' => 'see'));
 
 // Use a lambda function to set the attributes of all site blocks
@@ -39,7 +77,7 @@ $siteblocks->attr('data-val', function( $i, $val) {
     return $i . " - " . $val->attr('class') . " - photo by Kelly Clark";
 });
 
-// Select the parents of the site's footer
+// Select the parent of the site's footer
 $sitefooterparent = $sitefooter->parent();
 
 // Remove the class of all i-tags within the site's footer's parent
@@ -51,9 +89,9 @@ $sitefooter->wrap('<section><div class="footer-wrapper"></div></section>');
 [...]
 ```
 
+-----
 
-
-## Supported methods :
+##### Supported methods :
 
 - [x] [$](http://api.jquery.com/jQuery/) *(1)*
 - [x] [$.parseHTML](http://api.jquery.com/jQuery.parseHTML/)
@@ -89,9 +127,9 @@ $sitefooter->wrap('<section><div class="footer-wrapper"></div></section>');
 *1. Renamed 'select', for obvious reasons*
 *2. Renamed 'void', since 'empty' is a reserved word in PHP*
 
+-----
 
-
-## Author
+##### Author
 
 | [![twitter/johnslegers](https://en.gravatar.com/avatar/bf4cc94221382810233575862875e687?s=70)](http://twitter.com/johnslegers "Follow @johnslegers on Twitter") |
 |---|
