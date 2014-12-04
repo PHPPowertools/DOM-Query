@@ -71,22 +71,27 @@ use \Symfony\Component\CssSelector\CssSelector as CssSelector;
 
 class DOM_Document extends \DOMDocument {
 
-    protected $_isHTML = false;
-
-    public function __construct($data = false, $version = null, $encoding = null) {
+    public function __construct($data = false, $doctype = 'html', $encoding = 'UTF-8', $version = '1.0') {
         parent::__construct($version, $encoding);
         $data = trim($data);
         if ($data && $data != '') {
-            if ($this->_isHTML) {
-                @$this->loadHTML($data);
+            if ($doctype) {
+                if ($doctype === 'html') {
+                    $this->loadHTML('<!DOCTYPE html><html><meta charset="' . $encoding . '"></html>');
+                    @$this->loadHTML($data);
+                } else {
+                    $this->loadXML('<?xml version="' . $version . '" encoding="' . $encoding . '"?><!DOCTYPE ' . $doctype . '><' . $doctype . '></' . $doctype . '>');
+                    @$this->loadXML($data);
+                }
             } else {
+                $this->loadXML('<?xml version="' . $version . '" encoding="' . $encoding . '"?><feed></feed>');
                 @$this->loadXML($data);
             }
         }
     }
 
     public function querySelectorAll($selector, $contextnode = null) {
-        if ($this->_isHTML) {
+        if (isset($this->doctype->name) && $this->doctype->name == 'html') {
             CssSelector::enableHtmlExtension();
         } else {
             CssSelector::disableHtmlExtension();
@@ -112,14 +117,14 @@ class DOM_Document extends \DOMDocument {
     }
 
     public function save($filename, $options = null) {
-        if ($this->_isHTML) {
+        if (isset($this->doctype->name) && $this->doctype->name == 'html') {
             return parent::saveHTMLFile($filename);
         }
         return $this->saveXMLFile($filename, $options);
     }
 
     public function load($filename, $options = null) {
-        if ($this->_isHTML) {
+        if (isset($this->doctype->name) && $this->doctype->name == 'html') {
             return parent::loadHTMLFile($filename);
         }
         return $this->loadXMLFile($filename, $options);

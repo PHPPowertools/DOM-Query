@@ -68,7 +68,9 @@
 namespace PowerTools;
 
 class DOM_XML extends DOM_Document {
-
-    protected $_isHTML = false;
+    
+    public function __construct($data = false, $doctype = false, $encoding = 'UTF-8', $version = '1.0') {
+        parent::__construct($data, $doctype, $encoding, $version);
+    }
 
 }

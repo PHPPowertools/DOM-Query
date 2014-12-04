@@ -1,4 +1,5 @@
 <?php
+
 /* !
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -91,7 +92,15 @@ class DOM_Query {
             }
         } else {
             $this->DOM = $source;
-            $this->isHtml = $isHtml;
+            if (isset($source->doctype->name) && $source->doctype->name == 'html') {
+                if ($source->doctype->name == 'html') {
+                    $this->isHtml = true;
+                } else {
+                    $this->isHtml = false;
+                }
+            } else {
+                $this->isHtml = $isHtml;
+            }
         }
         $this->nodes = array($this->DOM);
     }
@@ -643,6 +652,9 @@ class DOM_Query {
     public function parent($selector = false) {
     // http://api.jquery.com/parent/
     return $this->select($this->_runGetter($this, '_getValue', 'parentNode', false));
+
+
+
 
 
 
