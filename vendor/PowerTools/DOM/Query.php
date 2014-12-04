@@ -270,7 +270,7 @@ class DOM_Query {
     public function parseHTML($newdoc) {
         // http://api.jquery.com/jQuery.parseHTML/
         if (is_string($newdoc)) {
-            $newdoc = new DOM_HTML('<html><body>' . $newdoc . '</body></html>');
+            $newdoc = new DOM_HTML($newdoc);
         }
         $vals = $newdoc->querySelector('body')->childNodes;
         $ret = array();

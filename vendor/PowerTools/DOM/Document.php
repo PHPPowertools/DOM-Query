@@ -1,6 +1,5 @@
 <?php
 
-
 /* !
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -69,25 +68,16 @@
 namespace PowerTools;
 
 use \Symfony\Component\CssSelector\CssSelector as CssSelector;
+use \Masterminds\HTML5 as HTML5;
 
 class DOM_Document extends \DOMDocument {
 
     public function __construct($data = false, $doctype = 'html', $encoding = 'UTF-8', $version = '1.0') {
         parent::__construct($version, $encoding);
-        $data = trim($data);
-        if ($data && $data != '') {
-            if ($doctype) {
-                if ($doctype === 'html') {
-                    $this->loadHTML('<!DOCTYPE html><html><head><meta charset="' . $encoding . '"></head></html>');
-                    @$this->loadHTML($data);
-                } else {
-                    $this->loadXML('<?xml version="' . $version . '" encoding="' . $encoding . '"?><!DOCTYPE ' . $doctype . '><' . $doctype . '></' . $doctype . '>');
-                    @$this->loadXML($data);
-                }
-            } else {
-                $this->loadXML('<?xml version="' . $version . '" encoding="' . $encoding . '"?><feed></feed>');
-                @$this->loadXML($data);
-            }
+        if ($doctype && $doctype === 'html') {
+            @$this->loadHTML($data);
+        } else {
+            @$this->loadXML($data);
         }
     }
 
@@ -109,8 +99,49 @@ class DOM_Document extends \DOMDocument {
         return null;
     }
 
+    public function loadHTMLFile($filename, $options = 0) {
+        $this->loadHTML(file_put_contents($filename), $options);
+    }
+
+    public function loadHTML($source, $options = 0) {
+        if ($source && $source != '') {
+            $data = trim($source);
+            $html5 = new HTML5(array('target' => $this, 'implicitHtmlNamespace' => true));
+            $data_start = mb_substr($data, 0, 10);
+            if (strpos($data_start, '<!DOCTYPE ') === 0 || strpos($data_start, '<html>') === 0) {
+                $html5->loadHTML($data);
+            } else {
+                @$this->loadHTML('<!DOCTYPE html><html><head><meta charset="' . $encoding . '" /></head><body></body></html>');
+                $t = $html5->loadHTMLFragment($data);
+                $docbody = $this->getElementsByTagName('body')->item(0);
+                while ($t->hasChildNodes()) {
+                    $docbody->appendChild($t->firstChild);
+                }
+            }
+        }
+    }
+
+    public function saveHTMLFile($filename, $node = null) {
+        return file_put_contents($filename, $this->saveHTML($node));
+    }
+
+    public function saveHTML($node = null, $options = null) {
+        $node = ($node === null) ? $this : $node;
+        $options = ($options === null) ? array() : $options;
+        $html5 = new HTML5($options);
+        return $html5->saveHTML($node);
+    }
+
     public function loadXMLFile($filename, $options = 0) {
         return parent::load($filename, $options);
+    }
+
+    public function loadXML($source, $options = 0) {
+        if ($source && $source != '') {
+            $data = trim($source);
+            parent::loadXML('<!DOCTYPE ' . $doctype . '><' . $doctype . '></' . $doctype . '>');
+            @parent::loadXML($data);
+        }
     }
 
     public function saveXMLFile($filename, $options = null) {
@@ -119,16 +150,18 @@ class DOM_Document extends \DOMDocument {
 
     public function save($filename, $options = null) {
         if (isset($this->doctype->name) && $this->doctype->name == 'html') {
-            return parent::saveHTMLFile($filename);
+            return $this->saveHTMLFile($filename, $options);
+        } else {
+            return $this->saveXMLFile($filename, $options);
         }
-        return $this->saveXMLFile($filename, $options);
     }
 
     public function load($filename, $options = null) {
         if (isset($this->doctype->name) && $this->doctype->name == 'html') {
-            return parent::loadHTMLFile($filename);
+            return $this->loadHTMLFile($filename, $options);
+        } else {
+            return $this->loadXMLFile($filename, $options);
         }
-        return $this->loadXMLFile($filename, $options);
     }
 
 }
