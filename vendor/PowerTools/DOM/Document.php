@@ -100,7 +100,7 @@ class DOM_Document extends \DOMDocument {
     }
 
     public function loadHTMLFile($filename, $options = 0) {
-        $this->loadHTML(file_put_contents($filename), $options);
+        $this->loadHTML(file_get_contents($filename), $options);
     }
 
     public function loadHTML($source, $options = 0) {
