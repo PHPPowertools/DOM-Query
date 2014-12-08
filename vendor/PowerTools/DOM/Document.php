@@ -106,7 +106,7 @@ class DOM_Document extends \DOMDocument {
     public function loadHTML($source, $options = 0) {
         if ($source && $source != '') {
             $data = trim($source);
-            $html5 = new HTML5(array('target' => $this, 'implicitHtmlNamespace' => true));
+            $html5 = new HTML5(array('targetDocument' => $this, 'disableHtmlNsInDom' => true));
             $data_start = mb_substr($data, 0, 10);
             if (strpos($data_start, '<!DOCTYPE ') === 0 || strpos($data_start, '<html>') === 0) {
                 $html5->loadHTML($data);
