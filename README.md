@@ -73,7 +73,7 @@ $sitefooter = $body->select('.site-footer > .site-center');
 $sitefooter->attr(array('id' => 'aweeesome', 'data-val' => 'see'));
 
 // Use a lambda function to set the attributes of all site blocks
-$siteblocks->attr('data-val', function( $i, $val) {
+$siteblocks->attr('data-val', function($i, $val) {
     return $i . " - " . $val->attr('class') . " - photo by Kelly Clark";
 });
 
