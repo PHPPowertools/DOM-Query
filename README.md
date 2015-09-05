@@ -20,7 +20,7 @@ $s = $('div.foo');
 $s = $(document.body);
 
 // Passing a jQuery object
-$s = $( $('p + p') );
+$s = $($('p + p'));
 ```
 ##### The DOM-Query way :
 ```php
