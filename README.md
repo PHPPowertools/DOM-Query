@@ -14,10 +14,10 @@ The purpose of this component is to provide a ***[jQuery](http://jquery.com/)***
 $ = jQuery;
 
 // Passing a string (CSS selector)
-$s = $( 'div.foo' );
+$s = $('div.foo');
 
 // Passing an element object (DOM Element)
-$s = $( document.body );
+$s = $(document.body);
 
 // Passing a jQuery object
 $s = $( $('p + p') );
@@ -27,22 +27,22 @@ $s = $( $('p + p') );
 namespace PowerTools;
 
 // Get file content
-$htmlcode = file_get_contents( 'https://github.com' );
+$htmlcode = file_get_contents('https://github.com');
 
 // Define your DOMCrawler based on file string
-$H = new DOM_Query( $htmlcode );
+$H = new DOM_Query($htmlcode);
 
 // Define your DOMCrawler based on an existing DOM_Query instance
-$H = new DOM_Query( $H->select('body') );
+$H = new DOM_Query($H->select('body'));
 
 // Passing a string (CSS selector)
-$s = $H->select( 'div.foo' );
+$s = $H->select('div.foo');
 
 // Passing an element object (DOM Element)
-$s = $H->select( $documentBody );
+$s = $H->select($documentBody);
 
 // Passing a DOM Query object
-$s = $H->select( $H->select('p + p') );
+$s = $H->select($H->select('p + p'));
 ```
 -----
 
@@ -59,7 +59,7 @@ $siteblocks = $body->select('.site-header, .masthead, .site-body, .site-footer')
 $siteblocks->select('button')->add('span')->addClass('icon icon-printer');
 
 // Use a lambda function to set the text of all site blocks
-$siteblocks->text(function( $i, $val) {
+$siteblocks->text(function($i, $val) {
     return $i . " - " . $val->attr('class');
 });
 
