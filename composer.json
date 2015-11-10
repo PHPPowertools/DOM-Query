@@ -16,7 +16,7 @@
         "symfony/css-selector": "2.*",
         "masterminds/html5": ">=2.1"
     },
-    "target-dir": "PowerTools",
+    "target-dir": "PowerTools/DOM-Query",
     "autoload": {
         "psr-0": {
             "PowerTools\\": "vendor/PowerTools/"
