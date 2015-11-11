@@ -1,13 +1,90 @@
 <?php
-namespace Masterminds;
 
-use Masterminds\HTML5\Parser\FileInputStream;
-use Masterminds\HTML5\Parser\StringInputStream;
-use Masterminds\HTML5\Parser\DOMTreeBuilder;
-use Masterminds\HTML5\Parser\Scanner;
-use Masterminds\HTML5\Parser\Tokenizer;
-use Masterminds\HTML5\Serializer\OutputRules;
-use Masterminds\HTML5\Serializer\Traverser;
+/* !
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               PACKAGE : PHP POWERTOOLS
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               COMPONENT : HTML5 
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               DESCRIPTION :
+ *
+ *               A library for easy HTML5 parsing
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               REQUIREMENTS :
+ *
+ *               PHP version 5.4+
+ *               PSR-0 compatibility
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               CREDITS : 
+ *
+ *               This library started out as a fork of Masterminds/html5-php
+ *
+ *               Contributors of that Masterminds/html5-php :
+ *               ---------------------------------------------
+ *               Matt Butcher [technosophos]
+ *               Matt Farina  [mattfarina]
+ *               Asmir Mustafic [goetas]
+ *               Edward Z. Yang [ezyang]
+ *               Geoffrey Sneddon [gsnedders]
+ *               Kukhar Vasily [ngreduce]
+ *               Rune Christensen [MrElectronic]
+ *               Mišo Belica [miso-belica]
+ *               Asmir Mustafic [goetas]
+ *               KITAITI Makoto [KitaitiMakoto]
+ *               Jacob Floyd [cognifloyd]
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               LICENSE :
+ *
+ * LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *  @category  HTML5 parsing
+ *  @package   HTML5
+ *  @author    John Slegers
+ *  @copyright MMXIV John Slegers
+ *  @license   http://www.opensource.org/licenses/mit-license.html MIT License
+ *  @link      https://github.com/jslegers
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ */
+
+namespace PowerTools;
 
 /**
  * This class offers convenience methods for parsing and serializing HTML5.
@@ -16,8 +93,7 @@ use Masterminds\HTML5\Serializer\Traverser;
  *
  * EXPERIMENTAL. This may change or be completely replaced.
  */
-class HTML5
-{
+class HTML5 {
 
     /**
      * Global options for the parser and serializer.
@@ -28,11 +104,9 @@ class HTML5
         // If the serializer should encode all entities.
         'encode_entities' => false
     );
-
     protected $errors = array();
 
-    public function __construct(array $options = array())
-    {
+    public function __construct(array $options = array()) {
         $this->options = array_merge($this->options, $options);
     }
 
@@ -41,8 +115,7 @@ class HTML5
      *
      * @return array The default options.
      */
-    public function getOptions()
-    {
+    public function getOptions() {
         return $this->options;
     }
 
@@ -63,15 +136,14 @@ class HTML5
      * @return \DOMDocument A DOM document. These object type is defined by the libxml
      *         library, and should have been included with your version of PHP.
      */
-    public function load($file)
-    {
+    public function load($file) {
         // Handle the case where file is a resource.
         if (is_resource($file)) {
             // FIXME: We need a StreamInputStream class.
             return $this->loadHTML(stream_get_contents($file));
         }
 
-        $input = new FileInputStream($file);
+        $input = new HTML5_Inputstream_File($file);
 
         return $this->parse($input);
     }
@@ -87,9 +159,8 @@ class HTML5
      * @return \DOMDocument A DOM document. DOM is part of libxml, which is included with
      *         almost all distribtions of PHP.
      */
-    public function loadHTML($string)
-    {
-        $input = new StringInputStream($string);
+    public function loadHTML($string) {
+        $input = new HTML5_Inputstream_String($string);
 
         return $this->parse($input);
     }
@@ -108,8 +179,7 @@ class HTML5
      * @return \DOMDocument A DOM document. These object type is defined by the libxml
      *         library, and should have been included with your version of PHP.
      */
-    public function loadHTMLFile($file)
-    {
+    public function loadHTMLFile($file) {
         return $this->load($file);
     }
 
@@ -122,9 +192,8 @@ class HTML5
      * @return \DOMDocumentFragment A DOM fragment. The DOM is part of libxml, which is included with
      *         almost all distributions of PHP.
      */
-    public function loadHTMLFragment($string)
-    {
-        $input = new StringInputStream($string);
+    public function loadHTMLFragment($string) {
+        $input = new HTML5_Inputstream_String($string);
 
         return $this->parseFragment($input);
     }
@@ -134,8 +203,7 @@ class HTML5
      *
      * @return array
      */
-    public function getErrors()
-    {
+    public function getErrors() {
         return $this->errors;
     }
 
@@ -144,8 +212,7 @@ class HTML5
      *
      * @return bool
      */
-    public function hasErrors()
-    {
+    public function hasErrors() {
         return count($this->errors) > 0;
     }
 
@@ -155,12 +222,11 @@ class HTML5
      * Lower-level loading function. This requires an input stream instead
      * of a string, file, or resource.
      */
-    public function parse(\Masterminds\HTML5\Parser\InputStream $input)
-    {
+    public function parse(HTML5_Inputstream_Interface $input) {
         $this->errors = array();
-        $events = new DOMTreeBuilder(false, $this->options);
-        $scanner = new Scanner($input);
-        $parser = new Tokenizer($scanner, $events);
+        $events = new HTML5_Parser_DOMTreeBuilder(false, $this->options);
+        $scanner = new HTML5_Parser_Scanner($input);
+        $parser = new HTML5_Parser_Tokenizer($scanner, $events);
 
         $parser->parse();
         $this->errors = $events->getErrors();
@@ -174,11 +240,10 @@ class HTML5
      * Lower-level loading function. This requires an input stream instead
      * of a string, file, or resource.
      */
-    public function parseFragment(\Masterminds\HTML5\Parser\InputStream $input)
-    {
-        $events = new DOMTreeBuilder(true, $this->options);
-        $scanner = new Scanner($input);
-        $parser = new Tokenizer($scanner, $events);
+    public function parseFragment(HTML5_Inputstream_Interface $input) {
+        $events = new HTML5_Parser_DOMTreeBuilder(true, $this->options);
+        $scanner = new HTML5_Parser_Scanner($input);
+        $parser = new HTML5_Parser_Tokenizer($scanner, $events);
 
         $parser->parse();
         $this->errors = $events->getErrors();
@@ -199,8 +264,7 @@ class HTML5
      *            entities are encoded. If this is set to true all entities will be encoded.
      *            Defaults to false.
      */
-    public function save($dom, $file, $options = array())
-    {
+    public function save($dom, $file, $options = array()) {
         $close = true;
         if (is_resource($file)) {
             $stream = $file;
@@ -209,8 +273,8 @@ class HTML5
             $stream = fopen($file, 'w');
         }
         $options = array_merge($this->getOptions(), $options);
-        $rules = new OutputRules($stream, $options);
-        $trav = new Traverser($dom, $stream, $rules, $options);
+        $rules = new HTML5_Serializer_OutputRules($stream, $options);
+        $trav = new HTML5_Serializer_Traverser($dom, $stream, $rules, $options);
 
         $trav->walk();
 
@@ -232,11 +296,11 @@ class HTML5
      *
      * @return string A HTML5 documented generated from the DOM.
      */
-    public function saveHTML($dom, $options = array())
-    {
+    public function saveHTML($dom, $options = array()) {
         $stream = fopen('php://temp', 'w');
         $this->save($dom, $stream, array_merge($this->getOptions(), $options));
 
         return stream_get_contents($stream, - 1, 0);
     }
+
 }

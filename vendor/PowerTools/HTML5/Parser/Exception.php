@@ -1,5 +1,4 @@
 <?php
-
 /* !
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -9,15 +8,14 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- *               COMPONENT : DOM QUERY 
+ *               COMPONENT : HTML5 
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
  *               DESCRIPTION :
  *
- *               A library for easy selection, crawling and
- *               modification of DOM_ and XML.
+ *               A library for easy HTML5 parsing
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -27,6 +25,26 @@
  *               PHP version 5.4+
  *               PSR-0 compatibility
  *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               CREDITS : 
+ *
+ *               This library started out as a fork of Masterminds/html5-php
+ *
+ *               Contributors of that Masterminds/html5-php :
+ *               ---------------------------------------------
+ *               Matt Butcher [technosophos]
+ *               Matt Farina  [mattfarina]
+ *               Asmir Mustafic [goetas]
+ *               Edward Z. Yang [ezyang]
+ *               Geoffrey Sneddon [gsnedders]
+ *               Kukhar Vasily [ngreduce]
+ *               Rune Christensen [MrElectronic]
+ *               Mišo Belica [miso-belica]
+ *               Asmir Mustafic [goetas]
+ *               KITAITI Makoto [KitaitiMakoto]
+ *               Jacob Floyd [cognifloyd]
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -54,8 +72,8 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- *  @category  DOM Selection
- *  @package   DOM-Query
+ *  @category  HTML5 parsing
+ *  @package   HTML5
  *  @author    John Slegers
  *  @copyright MMXIV John Slegers
  *  @license   http://www.opensource.org/licenses/mit-license.html MIT License
@@ -67,10 +85,9 @@
 
 namespace PowerTools;
 
-class DOM_HTML extends DOM_Document {
+/**
+ * Emit when the parser has an error.
+ */
+class HTML5_Parser_Exception extends HTML5_Exception {
     
-    public function __construct($data = false, $doctype = 'html', $encoding = 'UTF-8', $version = '1.0') {
-        parent::__construct($data, $doctype, $encoding, $version);
-    }
-
 }

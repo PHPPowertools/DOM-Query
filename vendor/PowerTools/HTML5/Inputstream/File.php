@@ -1,5 +1,4 @@
 <?php
-
 /* !
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -9,15 +8,14 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- *               COMPONENT : DOM QUERY 
+ *               COMPONENT : HTML5 
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
  *               DESCRIPTION :
  *
- *               A library for easy selection, crawling and
- *               modification of DOM_ and XML.
+ *               A library for easy HTML5 parsing
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -27,6 +25,26 @@
  *               PHP version 5.4+
  *               PSR-0 compatibility
  *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               CREDITS : 
+ *
+ *               This library started out as a fork of Masterminds/html5-php
+ *
+ *               Contributors of that Masterminds/html5-php :
+ *               ---------------------------------------------
+ *               Matt Butcher [technosophos]
+ *               Matt Farina  [mattfarina]
+ *               Asmir Mustafic [goetas]
+ *               Edward Z. Yang [ezyang]
+ *               Geoffrey Sneddon [gsnedders]
+ *               Kukhar Vasily [ngreduce]
+ *               Rune Christensen [MrElectronic]
+ *               Mišo Belica [miso-belica]
+ *               Asmir Mustafic [goetas]
+ *               KITAITI Makoto [KitaitiMakoto]
+ *               Jacob Floyd [cognifloyd]
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -54,8 +72,8 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- *  @category  DOM Selection
- *  @package   DOM-Query
+ *  @category  HTML5 parsing
+ *  @package   HTML5
  *  @author    John Slegers
  *  @copyright MMXIV John Slegers
  *  @license   http://www.opensource.org/licenses/mit-license.html MIT License
@@ -67,10 +85,31 @@
 
 namespace PowerTools;
 
-class DOM_HTML extends DOM_Document {
-    
-    public function __construct($data = false, $doctype = 'html', $encoding = 'UTF-8', $version = '1.0') {
-        parent::__construct($data, $doctype, $encoding, $version);
+/**
+ * The HTML5_Inputstream_File loads a file to be parsed.
+ *
+ * So right now we read files into strings and then process the
+ * string. We chose to do this largely for the sake of expediency of
+ * development, and also because we could optimize toward processing
+ * arbitrarily large chunks of the input. But in the future, we'd
+ * really like to rewrite this class to efficiently handle lower level
+ * stream reads (and thus efficiently handle large documents).
+ *
+ * @todo A buffered input stream would be useful.
+ */
+class HTML5_Inputstream_File extends HTML5_Inputstream_String implements HTML5_Inputstream_Interface {
+
+    /**
+     * Load a file input stream.
+     *
+     * @param string $data
+     *            The file or url path to load.
+     */
+    public function __construct($data, $encoding = 'UTF-8', $debug = '') {
+        // Get the contents of the file.
+        $content = file_get_contents($data);
+
+        parent::__construct($content, $encoding, $debug);
     }
 
 }

@@ -1,35 +1,121 @@
 <?php
+/* !
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               PACKAGE : PHP POWERTOOLS
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               COMPONENT : HTML5 
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               DESCRIPTION :
+ *
+ *               A library for easy HTML5 parsing
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               REQUIREMENTS :
+ *
+ *               PHP version 5.4+
+ *               PSR-0 compatibility
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               CREDITS : 
+ *
+ *               This library started out as a fork of Masterminds/html5-php
+ *
+ *               Contributors of that Masterminds/html5-php :
+ *               ---------------------------------------------
+ *               Matt Butcher [technosophos]
+ *               Matt Farina  [mattfarina]
+ *               Asmir Mustafic [goetas]
+ *               Edward Z. Yang [ezyang]
+ *               Geoffrey Sneddon [gsnedders]
+ *               Kukhar Vasily [ngreduce]
+ *               Rune Christensen [MrElectronic]
+ *               Mišo Belica [miso-belica]
+ *               Asmir Mustafic [goetas]
+ *               KITAITI Makoto [KitaitiMakoto]
+ *               Jacob Floyd [cognifloyd]
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               LICENSE :
+ *
+ * LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *  @category  HTML5 parsing
+ *  @package   HTML5
+ *  @author    John Slegers
+ *  @copyright MMXIV John Slegers
+ *  @license   http://www.opensource.org/licenses/mit-license.html MIT License
+ *  @link      https://github.com/jslegers
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ */
+
 /**
  * Loads a string to be parsed.
  */
-namespace Masterminds\HTML5\Parser;
+
+namespace PowerTools;
+
 
 /*
  *
-* Based on code from html5lib:
+ * Based on code from html5lib:
 
-Copyright 2009 Geoffrey Sneddon <http://gsnedders.com/>
+  Copyright 2009 Geoffrey Sneddon <http://gsnedders.com/>
 
-Permission is hereby granted, free of charge, to any person obtaining a
-copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
+  Permission is hereby granted, free of charge, to any person obtaining a
+  copy of this software and associated documentation files (the
+  "Software"), to deal in the Software without restriction, including
+  without limitation the rights to use, copy, modify, merge, publish,
+  distribute, sublicense, and/or sell copies of the Software, and to
+  permit persons to whom the Software is furnished to do so, subject to
+  the following conditions:
 
-The above copyright notice and this permission notice shall be included
-in all copies or substantial portions of the Software.
+  The above copyright notice and this permission notice shall be included
+  in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-*/
+ */
 
 // Some conventions:
 // - /* */ indicates verbatim text from the HTML 5 specification
@@ -39,8 +125,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 // - // indicates regular comments
 
-class StringInputStream implements InputStream
-{
+class HTML5_Inputstream_String implements HTML5_Inputstream_Interface {
 
     /**
      * The string data we're parsing.
@@ -63,23 +148,22 @@ class StringInputStream implements InputStream
     public $errors = array();
 
     /**
-     * Create a new InputStream wrapper.
+     * Create a new HTML5_Inputstream_Interface wrapper.
      *
      * @param $data Data
      *            to parse
      */
-    public function __construct($data, $encoding = 'UTF-8', $debug = '')
-    {
-        $data = UTF8Utils::convertToUTF8($data, $encoding);
+    public function __construct($data, $encoding = 'UTF-8', $debug = '') {
+        $data = HTML5_Parser_UTF8Utils::convertToUTF8($data, $encoding);
         if ($debug)
             fprintf(STDOUT, $debug, $data, strlen($data));
 
-            // There is good reason to question whether it makes sense to
-            // do this here, since most of these checks are done during
-            // parsing, and since this check doesn't actually *do* anything.
-        $this->errors = UTF8Utils::checkForIllegalCodepoints($data);
+        // There is good reason to question whether it makes sense to
+        // do this here, since most of these checks are done during
+        // parsing, and since this check doesn't actually *do* anything.
+        $this->errors = HTML5_Parser_UTF8Utils::checkForIllegalCodepoints($data);
         // if (!empty($e)) {
-        // throw new ParseError("UTF-8 encoding issues: " . implode(', ', $e));
+        // throw new HTML5_Parser_Exception("UTF-8 encoding issues: " . implode(', ', $e));
         // }
 
         $data = $this->replaceLinefeeds($data);
@@ -92,8 +176,7 @@ class StringInputStream implements InputStream
     /**
      * Replace linefeed characters according to the spec.
      */
-    protected function replaceLinefeeds($data)
-    {
+    protected function replaceLinefeeds($data) {
         /*
          * U+000D CARRIAGE RETURN (CR) characters and U+000A LINE FEED (LF) characters are treated specially. Any CR characters that are followed by LF characters must be removed, and any CR characters not followed by LF characters must be converted to LF characters. Thus, newlines in HTML DOMs are represented by LF characters, and there are never any CR characters in the input to the tokenization stage.
          */
@@ -109,8 +192,7 @@ class StringInputStream implements InputStream
     /**
      * Returns the current line that the tokenizer is at.
      */
-    public function currentLine()
-    {
+    public function currentLine() {
         if (empty($this->EOF) || $this->char == 0) {
             return 1;
         }
@@ -124,8 +206,7 @@ class StringInputStream implements InputStream
      * @deprecated
      *
      */
-    public function getCurrentLine()
-    {
+    public function getCurrentLine() {
         return currentLine();
     }
 
@@ -136,8 +217,7 @@ class StringInputStream implements InputStream
      *
      * @return int The column number.
      */
-    public function columnOffset()
-    {
+    public function columnOffset() {
         // Short circuit for the first char.
         if ($this->char == 0) {
             return 0;
@@ -159,7 +239,7 @@ class StringInputStream implements InputStream
             $findLengthOf = substr($this->data, 0, $this->char);
         }
 
-        return UTF8Utils::countChars($findLengthOf);
+        return HTML5_Parser_UTF8Utils::countChars($findLengthOf);
     }
 
     /**
@@ -167,8 +247,7 @@ class StringInputStream implements InputStream
      * @deprecated
      *
      */
-    public function getColumnOffset()
-    {
+    public function getColumnOffset() {
         return $this->columnOffset();
     }
 
@@ -177,8 +256,7 @@ class StringInputStream implements InputStream
      *
      * @return string The current character.
      */
-    public function current()
-    {
+    public function current() {
         return $this->data[$this->char];
     }
 
@@ -186,16 +264,14 @@ class StringInputStream implements InputStream
      * Advance the pointer.
      * This is part of the Iterator interface.
      */
-    public function next()
-    {
+    public function next() {
         $this->char ++;
     }
 
     /**
      * Rewind to the start of the string.
      */
-    public function rewind()
-    {
+    public function rewind() {
         $this->char = 0;
     }
 
@@ -204,8 +280,7 @@ class StringInputStream implements InputStream
      *
      * @return bool Is the current pointer location valid.
      */
-    public function valid()
-    {
+    public function valid() {
         if ($this->char < $this->EOF) {
             return true;
         }
@@ -221,11 +296,10 @@ class StringInputStream implements InputStream
      *
      * @note This performs bounds checking
      *
-     * @return string Returns the remaining text. If called when the InputStream is
+     * @return string Returns the remaining text. If called when the HTML5_Inputstream_Interface is
      *         already exhausted, it returns an empty string.
      */
-    public function remainingChars()
-    {
+    public function remainingChars() {
         if ($this->char < $this->EOF) {
             $data = substr($this->data, $this->char);
             $this->char = $this->EOF;
@@ -251,8 +325,7 @@ class StringInputStream implements InputStream
      * @return mixed Index or false if no match is found. You should use strong
      *         equality when checking the result, since index could be 0.
      */
-    public function charsUntil($bytes, $max = null)
-    {
+    public function charsUntil($bytes, $max = null) {
         if ($this->char >= $this->EOF) {
             return false;
         }
@@ -282,8 +355,7 @@ class StringInputStream implements InputStream
      * @param int $max
      *            The max number of chars to read.
      */
-    public function charsWhile($bytes, $max = null)
-    {
+    public function charsWhile($bytes, $max = null) {
         if ($this->char >= $this->EOF) {
             return false;
         }
@@ -305,8 +377,7 @@ class StringInputStream implements InputStream
      * @param int $howMany
      *            The number of characters to unconsume.
      */
-    public function unconsume($howMany = 1)
-    {
+    public function unconsume($howMany = 1) {
         if (($this->char - $howMany) >= 0) {
             $this->char = $this->char - $howMany;
         }
@@ -315,8 +386,7 @@ class StringInputStream implements InputStream
     /**
      * Look ahead without moving cursor.
      */
-    public function peek()
-    {
+    public function peek() {
         if (($this->char + 1) <= $this->EOF) {
             return $this->data[$this->char + 1];
         }
@@ -324,8 +394,8 @@ class StringInputStream implements InputStream
         return false;
     }
 
-    public function key()
-    {
+    public function key() {
         return $this->char;
     }
+
 }

@@ -1,5 +1,4 @@
 <?php
-
 /* !
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -9,15 +8,14 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- *               COMPONENT : DOM QUERY 
+ *               COMPONENT : HTML5 
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
  *               DESCRIPTION :
  *
- *               A library for easy selection, crawling and
- *               modification of DOM_ and XML.
+ *               A library for easy HTML5 parsing
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -27,6 +25,26 @@
  *               PHP version 5.4+
  *               PSR-0 compatibility
  *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               CREDITS : 
+ *
+ *               This library started out as a fork of Masterminds/html5-php
+ *
+ *               Contributors of that Masterminds/html5-php :
+ *               ---------------------------------------------
+ *               Matt Butcher [technosophos]
+ *               Matt Farina  [mattfarina]
+ *               Asmir Mustafic [goetas]
+ *               Edward Z. Yang [ezyang]
+ *               Geoffrey Sneddon [gsnedders]
+ *               Kukhar Vasily [ngreduce]
+ *               Rune Christensen [MrElectronic]
+ *               Mišo Belica [miso-belica]
+ *               Asmir Mustafic [goetas]
+ *               KITAITI Makoto [KitaitiMakoto]
+ *               Jacob Floyd [cognifloyd]
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -54,8 +72,8 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- *  @category  DOM Selection
- *  @package   DOM-Query
+ *  @category  HTML5 parsing
+ *  @package   HTML5
  *  @author    John Slegers
  *  @copyright MMXIV John Slegers
  *  @license   http://www.opensource.org/licenses/mit-license.html MIT License
@@ -67,10 +85,58 @@
 
 namespace PowerTools;
 
-class DOM_HTML extends DOM_Document {
-    
-    public function __construct($data = false, $doctype = 'html', $encoding = 'UTF-8', $version = '1.0') {
-        parent::__construct($data, $doctype, $encoding, $version);
+/**
+ * Manage entity references.
+ *
+ * This is a simple resolver for HTML5 character reference entitites.
+ * See HTML5_Entities for the list of supported entities.
+ */
+class HTML5_Parser_CharacterReference {
+
+    protected static $numeric_mask = array(
+        0x0,
+        0x2FFFF,
+        0,
+        0xFFFF
+    );
+
+    /**
+     * Given a name (e.g.
+     * 'amp'), lookup the UTF-8 character ('&')
+     *
+     * @param string $name
+     *            The name to look up.
+     * @return string The character sequence. In UTF-8 this may be more than one byte.
+     */
+    public static function lookupName($name) {
+        // Do we really want to return NULL here? or FFFD
+        return isset(HTML5_Entities::$byName[$name]) ? HTML5_Entities::$byName[$name] : null;
+    }
+
+    /**
+     * Given a Unicode codepoint, return the UTF-8 character.
+     *
+     * (NOT USED ANYWHERE)
+     */
+    /*
+     * public static function lookupCode($codePoint) { return 'POINT'; }
+     */
+
+    /**
+     * Given a decimal number, return the UTF-8 character.
+     */
+    public static function lookupDecimal($int) {
+        $entity = '&#' . $int . ';';
+        // UNTESTED: This may fail on some planes. Couldn't find full documentation
+        // on the value of the mask array.
+        return mb_decode_numericentity($entity, static::$numeric_mask, 'utf-8');
+    }
+
+    /**
+     * Given a hexidecimal number, return the UTF-8 character.
+     */
+    public static function lookupHex($hexdec) {
+        return static::lookupDecimal(hexdec($hexdec));
     }
 
 }

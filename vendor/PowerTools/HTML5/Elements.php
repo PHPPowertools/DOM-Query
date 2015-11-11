@@ -1,8 +1,93 @@
 <?php
+/* !
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               PACKAGE : PHP POWERTOOLS
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               COMPONENT : HTML5 
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               DESCRIPTION :
+ *
+ *               A library for easy HTML5 parsing
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               REQUIREMENTS :
+ *
+ *               PHP version 5.4+
+ *               PSR-0 compatibility
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               CREDITS : 
+ *
+ *               This library started out as a fork of Masterminds/html5-php
+ *
+ *               Contributors of that Masterminds/html5-php :
+ *               ---------------------------------------------
+ *               Matt Butcher [technosophos]
+ *               Matt Farina  [mattfarina]
+ *               Asmir Mustafic [goetas]
+ *               Edward Z. Yang [ezyang]
+ *               Geoffrey Sneddon [gsnedders]
+ *               Kukhar Vasily [ngreduce]
+ *               Rune Christensen [MrElectronic]
+ *               Mišo Belica [miso-belica]
+ *               Asmir Mustafic [goetas]
+ *               KITAITI Makoto [KitaitiMakoto]
+ *               Jacob Floyd [cognifloyd]
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               LICENSE :
+ *
+ * LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *  @category  HTML5 parsing
+ *  @package   HTML5
+ *  @author    John Slegers
+ *  @copyright MMXIV John Slegers
+ *  @license   http://www.opensource.org/licenses/mit-license.html MIT License
+ *  @link      https://github.com/jslegers
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ */
+
 /**
  * Provide general element functions.
  */
-namespace Masterminds\HTML5;
+
+namespace PowerTools;
 
 /**
  * This class provides general information about HTML5 elements,
@@ -15,14 +100,12 @@ namespace Masterminds\HTML5;
  *       naming that this could significantly shrink the size and maybe make it
  *       faster. See the Go teams implementation at https://code.google.com/p/go/source/browse/html/atom.
  */
-class Elements
-{
+class HTML5_Elements {
 
     /**
      * Indicates an element is described in the specification.
      */
     const KNOWN_ELEMENT = 1;
-
     // From section 8.1.2: "script", "style"
     // From 8.2.5.4.7 ("in body" insertion mode): "noembed", "noscript"
     // From 8.4 "style", "xmp", "iframe", "noembed", "noframes"
@@ -30,7 +113,6 @@ class Elements
      * Indicates the contained text should be processed as raw text.
      */
     const TEXT_RAW = 2;
-
     // From section 8.1.2: "textarea", "title"
     /**
      * Indicates the contained text should be processed as RCDATA.
@@ -41,7 +123,6 @@ class Elements
      * Indicates the tag cannot have content.
      */
     const VOID_TAG = 8;
-
     // "address", "article", "aside", "blockquote", "center", "details", "dialog", "dir", "div", "dl",
     // "fieldset", "figcaption", "figure", "footer", "header", "hgroup", "menu",
     // "nav", "ol", "p", "section", "summary", "ul"
@@ -59,7 +140,6 @@ class Elements
      * Indicates that the text inside is plaintext (pre).
      */
     const TEXT_PLAINTEXT = 32;
-
     // See https://developer.mozilla.org/en-US/docs/HTML/Block-level_elements
     /**
      * Indicates that the tag is a block.
@@ -94,7 +174,7 @@ class Elements
         "col" => 9, // NORMAL | VOID_TAG
         "colgroup" => 1,
         "command" => 9, // NORMAL | VOID_TAG
-                        // "data" => 1, // This is highly experimental and only part of the whatwg spec (not w3c). See https://developer.mozilla.org/en-US/docs/HTML/Element/data
+        // "data" => 1, // This is highly experimental and only part of the whatwg spec (not w3c). See https://developer.mozilla.org/en-US/docs/HTML/Element/data
         "datalist" => 1,
         "dd" => 65, // NORMAL | BLOCK_TAG
         "del" => 1,
@@ -182,7 +262,6 @@ class Elements
         "var" => 1,
         "video" => 65, // NORMAL | BLOCK_TAG
         "wbr" => 9, // NORMAL | VOID_TAG
-
         // Legacy?
         'basefont' => 8, // VOID_TAG
         'bgsound' => 8, // VOID_TAG
@@ -198,7 +277,7 @@ class Elements
         'isindex' => 8, // VOID_TAG
         'xmp' => 20, // AUTOCLOSE_P | VOID_TAG | RAW_TEXT
         'noembed' => 2 // RAW_TEXT
-        );
+    );
 
     /**
      * The MathML elements.
@@ -478,9 +557,8 @@ class Elements
      *            One of the constants on this class.
      * @return boolean true if the element matches the mask, false otherwise.
      */
-    public static function isA($name, $mask)
-    {
-        if (! static::isElement($name)) {
+    public static function isA($name, $mask) {
+        if (!static::isElement($name)) {
             return false;
         }
 
@@ -495,8 +573,7 @@ class Elements
      *
      * @return bool True if a html5 element and false otherwise.
      */
-    public static function isHtml5Element($name)
-    {
+    public static function isHtml5Element($name) {
         // html5 element names are case insensetitive. Forcing lowercase for the check.
         // Do we need this check or will all data passed here already be lowercase?
         return isset(static::$html5[strtolower($name)]);
@@ -510,8 +587,7 @@ class Elements
      *
      * @return bool True if a MathML name and false otherwise.
      */
-    public static function isMathMLElement($name)
-    {
+    public static function isMathMLElement($name) {
         // MathML is case-sensetitive unlike html5 elements.
         return isset(static::$mathml[$name]);
     }
@@ -524,8 +600,7 @@ class Elements
      *
      * @return boolean True if a SVG element and false otherise.
      */
-    public static function isSvgElement($name)
-    {
+    public static function isSvgElement($name) {
         // SVG is case-sensetitive unlike html5 elements.
         return isset(static::$svg[$name]);
     }
@@ -541,8 +616,7 @@ class Elements
      *
      * @return bool True if valid and false otherwise.
      */
-    public static function isElement($name)
-    {
+    public static function isElement($name) {
         return static::isHtml5Element($name) || static::isMathMLElement($name) || static::isSvgElement($name);
     }
 
@@ -554,8 +628,7 @@ class Elements
      *
      * @return int The element mask.
      */
-    public static function element($name)
-    {
+    public static function element($name) {
         if (isset(static::$html5[$name])) {
             return static::$html5[$name];
         }
@@ -577,8 +650,7 @@ class Elements
      *
      * @return string The normalized form of the element name.
      */
-    public static function normalizeSvgElement($name)
-    {
+    public static function normalizeSvgElement($name) {
         $name = strtolower($name);
         if (isset(static::$svgCaseSensitiveElementMap[$name])) {
             $name = static::$svgCaseSensitiveElementMap[$name];
@@ -595,8 +667,7 @@ class Elements
      *
      * @return string The normalized form of the attribute name.
      */
-    public static function normalizeSvgAttribute($name)
-    {
+    public static function normalizeSvgAttribute($name) {
         $name = strtolower($name);
         if (isset(static::$svgCaseSensitiveAttributeMap[$name])) {
             $name = static::$svgCaseSensitiveAttributeMap[$name];
@@ -615,8 +686,7 @@ class Elements
      *
      * @return string The normalized form of the attribute name.
      */
-    public static function normalizeMathMlAttribute($name)
-    {
+    public static function normalizeMathMlAttribute($name) {
         $name = strtolower($name);
 
         // Only one attribute has a mixed case form for MathML.
@@ -626,4 +696,5 @@ class Elements
 
         return $name;
     }
+
 }

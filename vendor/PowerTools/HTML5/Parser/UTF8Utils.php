@@ -1,36 +1,121 @@
 <?php
-namespace Masterminds\HTML5\Parser;
+/* !
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               PACKAGE : PHP POWERTOOLS
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               COMPONENT : HTML5 
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               DESCRIPTION :
+ *
+ *               A library for easy HTML5 parsing
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               REQUIREMENTS :
+ *
+ *               PHP version 5.4+
+ *               PSR-0 compatibility
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               CREDITS : 
+ *
+ *               This library started out as a fork of Masterminds/html5-php
+ *
+ *               Contributors of that Masterminds/html5-php :
+ *               ---------------------------------------------
+ *               Matt Butcher [technosophos]
+ *               Matt Farina  [mattfarina]
+ *               Asmir Mustafic [goetas]
+ *               Edward Z. Yang [ezyang]
+ *               Geoffrey Sneddon [gsnedders]
+ *               Kukhar Vasily [ngreduce]
+ *               Rune Christensen [MrElectronic]
+ *               Mišo Belica [miso-belica]
+ *               Asmir Mustafic [goetas]
+ *               KITAITI Makoto [KitaitiMakoto]
+ *               Jacob Floyd [cognifloyd]
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               LICENSE :
+ *
+ * LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *  @category  HTML5 parsing
+ *  @package   HTML5
+ *  @author    John Slegers
+ *  @copyright MMXIV John Slegers
+ *  @license   http://www.opensource.org/licenses/mit-license.html MIT License
+ *  @link      https://github.com/jslegers
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ */
+
+namespace PowerTools;
+
 /*
  *
-* Portions based on code from html5lib files with the following copyright:
+ * Portions based on code from html5lib files with the following copyright:
 
-Copyright 2009 Geoffrey Sneddon <http://gsnedders.com/>
+  Copyright 2009 Geoffrey Sneddon <http://gsnedders.com/>
 
-Permission is hereby granted, free of charge, to any person obtaining a
-copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
+  Permission is hereby granted, free of charge, to any person obtaining a
+  copy of this software and associated documentation files (the
+  "Software"), to deal in the Software without restriction, including
+  without limitation the rights to use, copy, modify, merge, publish,
+  distribute, sublicense, and/or sell copies of the Software, and to
+  permit persons to whom the Software is furnished to do so, subject to
+  the following conditions:
 
-The above copyright notice and this permission notice shall be included
-in all copies or substantial portions of the Software.
+  The above copyright notice and this permission notice shall be included
+  in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-*/
+ */
+
 /**
  * UTF-8 Utilities
  */
-class UTF8Utils
-{
+class HTML5_Parser_UTF8Utils {
 
     /**
      * The Unicode replacement character..
@@ -45,8 +130,7 @@ class UTF8Utils
      *
      * @todo Move this to a general utility class.
      */
-    public static function countChars($string)
-    {
+    public static function countChars($string) {
         // Get the length for the string we need.
         if (function_exists('iconv_strlen')) {
             return iconv_strlen($string, 'utf-8');
@@ -74,8 +158,7 @@ class UTF8Utils
      * @param string $encoding
      *            A valid encoding. Examples: http://www.php.net/manual/en/mbstring.supported-encodings.php
      */
-    public static function convertToUTF8($data, $encoding = 'UTF-8')
-    {
+    public static function convertToUTF8($data, $encoding = 'UTF-8') {
         /*
          * From the HTML5 spec: Given an encoding, the bytes in the input stream must be converted to Unicode characters for the tokeniser, as described by the rules for that encoding, except that the leading U+FEFF BYTE ORDER MARK character, if any, must not be stripped by the encoding layer (it is stripped by the rule below). Bytes or sequences of bytes in the original byte stream that could not be converted to Unicode characters must be converted to U+FFFD REPLACEMENT CHARACTER code points.
          */
@@ -88,7 +171,6 @@ class UTF8Utils
             // mb library has the following behaviors:
             // - UTF-16 surrogates result in false.
             // - Overlongs and outside Plane 16 result in empty strings.
-
             // Before we run mb_convert_encoding we need to tell it what to do with
             // characters it does not know. This could be different than the parent
             // application executing this library so we store the value, change it
@@ -128,10 +210,9 @@ class UTF8Utils
      *            A string to analyze.
      * @return array An array of (string) error messages produced by the scanning.
      */
-    public static function checkForIllegalCodepoints($data)
-    {
-        if (! function_exists('preg_match_all')) {
-            throw\Exception('The PCRE library is not loaded or is not available.');
+    public static function checkForIllegalCodepoints($data) {
+        if (!function_exists('preg_match_all')) {
+            throw HTML5_Exception('The PCRE library is not loaded or is not available.');
         }
 
         // Vestigal error handling.
@@ -149,7 +230,7 @@ class UTF8Utils
          */
         // Check PCRE is loaded.
         $count = preg_match_all(
-            '/(?:
+                '/(?:
         [\x01-\x08\x0B\x0E-\x1F\x7F] # U+0001 to U+0008, U+000B,  U+000E to U+001F and U+007F
       |
         \xC2[\x80-\x9F] # U+0080 to U+009F
@@ -168,4 +249,5 @@ class UTF8Utils
 
         return $errors;
     }
+
 }

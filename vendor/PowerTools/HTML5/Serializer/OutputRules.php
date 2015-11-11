@@ -1,4 +1,88 @@
 <?php
+/* !
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               PACKAGE : PHP POWERTOOLS
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               COMPONENT : HTML5 
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               DESCRIPTION :
+ *
+ *               A library for easy HTML5 parsing
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               REQUIREMENTS :
+ *
+ *               PHP version 5.4+
+ *               PSR-0 compatibility
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *               CREDITS : 
+ *
+ *               This library started out as a fork of Masterminds/html5-php
+ *
+ *               Contributors of that Masterminds/html5-php :
+ *               ---------------------------------------------
+ *               Matt Butcher [technosophos]
+ *               Matt Farina  [mattfarina]
+ *               Asmir Mustafic [goetas]
+ *               Edward Z. Yang [ezyang]
+ *               Geoffrey Sneddon [gsnedders]
+ *               Kukhar Vasily [ngreduce]
+ *               Rune Christensen [MrElectronic]
+ *               Mišo Belica [miso-belica]
+ *               Asmir Mustafic [goetas]
+ *               KITAITI Makoto [KitaitiMakoto]
+ *               Jacob Floyd [cognifloyd]
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ *               LICENSE :
+ *
+ * LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *  @category  HTML5 parsing
+ *  @package   HTML5
+ *  @author    John Slegers
+ *  @copyright MMXIV John Slegers
+ *  @license   http://www.opensource.org/licenses/mit-license.html MIT License
+ *  @link      https://github.com/jslegers
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ */
+
 /**
  * @file
  * The rules for generating output in the serializer.
@@ -6,28 +90,23 @@
  * These output rules are likely to generate output similar to the document that
  * was parsed. It is not intended to output exactly the document that was parsed.
  */
-namespace Masterminds\HTML5\Serializer;
 
-use Masterminds\HTML5\Elements;
+namespace PowerTools;
+
 
 /**
  * Generate the output html5 based on element rules.
  */
-class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
-{
+class HTML5_Serializer_OutputRules implements HTML5_Serializer_RulesInterface {
+
     /**
      * Defined in http://www.w3.org/TR/html51/infrastructure.html#html-namespace-0
      */
     const NAMESPACE_HTML = 'http://www.w3.org/1999/xhtml';
-
     const NAMESPACE_MATHML = 'http://www.w3.org/1998/Math/MathML';
-
     const NAMESPACE_SVG = 'http://www.w3.org/2000/svg';
-
     const NAMESPACE_XLINK = 'http://www.w3.org/1999/xlink';
-
     const NAMESPACE_XML = 'http://www.w3.org/XML/1998/namespace';
-
     const NAMESPACE_XMLNS = 'http://www.w3.org/2000/xmlns/';
 
     /**
@@ -44,9 +123,7 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
     );
 
     const IM_IN_HTML = 1;
-
     const IM_IN_SVG = 2;
-
     const IM_IN_MATHML = 3;
 
     /**
@@ -54,42 +131,34 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
      * @var boolean
      */
     private $hasHTML5 = false;
-
     protected $traverser;
-
     protected $encode = false;
-
     protected $out;
-
     protected $outputMode;
-
     private $xpath;
-
     protected $nonBooleanAttributes = array(
         /*
+          array(
+          'nodeNamespace'=>'http://www.w3.org/1999/xhtml',
+          'attrNamespace'=>'http://www.w3.org/1999/xhtml',
+
+          'nodeName'=>'img', 'nodeName'=>array('img', 'a'),
+          'attrName'=>'alt', 'attrName'=>array('title', 'alt'),
+
+
+          'prefixes'=>['xh'=>'http://www.w3.org/1999/xhtml'),
+          'xpath' => "@checked[../../xh:input[@type='radio' or @type='checkbox']]",
+          ),
+         */
         array(
-            'nodeNamespace'=>'http://www.w3.org/1999/xhtml',
-            'attrNamespace'=>'http://www.w3.org/1999/xhtml',
-
-            'nodeName'=>'img', 'nodeName'=>array('img', 'a'),
-            'attrName'=>'alt', 'attrName'=>array('title', 'alt'),
-
-
-            'prefixes'=>['xh'=>'http://www.w3.org/1999/xhtml'),
-            'xpath' => "@checked[../../xh:input[@type='radio' or @type='checkbox']]",
+            'nodeNamespace' => 'http://www.w3.org/1999/xhtml',
+            'attrName' => array('alt', 'title'),
         ),
-        */
-        array(
-            'nodeNamespace'=>'http://www.w3.org/1999/xhtml',
-            'attrName'=>array('alt', 'title'),
-        ),
-
     );
 
     const DOCTYPE = '<!DOCTYPE html>';
 
-    public function __construct($output, $options = array())
-    {
+    public function __construct($output, $options = array()) {
         if (isset($options['encode_entities'])) {
             $this->encode = $options['encode_entities'];
         }
@@ -100,20 +169,18 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
         // If HHVM, see https://github.com/facebook/hhvm/issues/2727
         $this->hasHTML5 = defined('ENT_HTML5') && !defined('HHVM_VERSION');
     }
-    public function addRule(array $rule)
-    {
+
+    public function addRule(array $rule) {
         $this->nonBooleanAttributes[] = $rule;
     }
 
-    public function setTraverser(\Masterminds\HTML5\Serializer\Traverser $traverser)
-    {
+    public function setTraverser(HTML5_Serializer_Traverser $traverser) {
         $this->traverser = $traverser;
 
         return $this;
     }
 
-    public function document($dom)
-    {
+    public function document($dom) {
         $this->doctype();
         if ($dom->documentElement) {
             $this->traverser->node($dom->documentElement);
@@ -121,14 +188,12 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
         }
     }
 
-    protected function doctype()
-    {
+    protected function doctype() {
         $this->wr(static::DOCTYPE);
         $this->nl();
     }
 
-    public function element($ele)
-    {
+    public function element($ele) {
         $name = $ele->tagName;
 
         // Per spec:
@@ -142,13 +207,13 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
         // Using if/elseif instead of switch because it's faster in PHP.
         if ($name == 'svg') {
             $this->outputMode = static::IM_IN_SVG;
-            $name = Elements::normalizeSvgElement($name);
+            $name = HTML5_Elements::normalizeSvgElement($name);
         } elseif ($name == 'math') {
             $this->outputMode = static::IM_IN_MATHML;
         }
 
         $this->openTag($ele);
-        if (Elements::isA($name, Elements::TEXT_RAW)) {
+        if (HTML5_Elements::isA($name, HTML5_Elements::TEXT_RAW)) {
             foreach ($ele->childNodes as $child) {
                 $this->wr($child->data);
             }
@@ -165,7 +230,7 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
         }
 
         // If not unary, add a closing tag.
-        if (! Elements::isA($name, Elements::VOID_TAG)) {
+        if (!HTML5_Elements::isA($name, HTML5_Elements::VOID_TAG)) {
             $this->closeTag($ele);
         }
     }
@@ -176,9 +241,8 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
      * @param \DOMText $ele
      *            The text node to write.
      */
-    public function text($ele)
-    {
-        if (isset($ele->parentNode) && isset($ele->parentNode->tagName) && Elements::isA($ele->parentNode->localName, Elements::TEXT_RAW)) {
+    public function text($ele) {
+        if (isset($ele->parentNode) && isset($ele->parentNode->tagName) && HTML5_Elements::isA($ele->parentNode->localName, HTML5_Elements::TEXT_RAW)) {
             $this->wr($ele->data);
             return;
         }
@@ -187,27 +251,25 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
         $this->wr($this->enc($ele->data));
     }
 
-    public function cdata($ele)
-    {
+    public function cdata($ele) {
         // This encodes CDATA.
         $this->wr($ele->ownerDocument->saveXML($ele));
     }
 
-    public function comment($ele)
-    {
+    public function comment($ele) {
         // These produce identical output.
         // $this->wr('<!--')->wr($ele->data)->wr('-->');
         $this->wr($ele->ownerDocument->saveXML($ele));
     }
 
-    public function processorInstruction($ele)
-    {
+    public function processorInstruction($ele) {
         $this->wr('<?')
-            ->wr($ele->target)
-            ->wr(' ')
-            ->wr($ele->data)
-            ->wr('?>');
+                ->wr($ele->target)
+                ->wr(' ')
+                ->wr($ele->data)
+                ->wr('?>');
     }
+
     /**
      * Write the namespace attributes
      *
@@ -215,13 +277,12 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
      * @param \DOMNode $ele
      *            The element being written.
      */
-    protected function namespaceAttrs($ele)
-    {
-        if (!$this->xpath || $this->xpath->document !== $ele->ownerDocument){
+    protected function namespaceAttrs($ele) {
+        if (!$this->xpath || $this->xpath->document !== $ele->ownerDocument) {
             $this->xpath = new \DOMXPath($ele->ownerDocument);
         }
 
-        foreach( $this->xpath->query('namespace::*[not(.=../../namespace::*)]', $ele ) as $nsNode ) {
+        foreach ($this->xpath->query('namespace::*[not(.=../../namespace::*)]', $ele) as $nsNode) {
             if (!in_array($nsNode->nodeValue, $this->implicitNamespaces)) {
                 $this->wr(' ')->wr($nsNode->nodeName)->wr('="')->wr($nsNode->nodeValue)->wr('"');
             }
@@ -237,8 +298,7 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
      * @param \DOMNode $ele
      *            The element being written.
      */
-    protected function openTag($ele)
-    {
+    protected function openTag($ele) {
         $this->wr('<')->wr($this->traverser->isLocalElement($ele) ? $ele->localName : $ele->tagName);
 
 
@@ -259,10 +319,9 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
         }
     }
 
-    protected function attrs($ele)
-    {
+    protected function attrs($ele) {
         // FIXME: Needs support for xml, xmlns, xlink, and namespaced elements.
-        if (! $ele->hasAttributes()) {
+        if (!$ele->hasAttributes()) {
             return $this;
         }
 
@@ -270,7 +329,7 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
         // value-less attributes.
         $map = $ele->attributes;
         $len = $map->length;
-        for ($i = 0; $i < $len; ++ $i) {
+        for ($i = 0; $i < $len; ++$i) {
             $node = $map->item($i);
             $val = $this->enc($node->value, true);
 
@@ -283,9 +342,9 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
             // Special handling for attributes in SVG and MathML.
             // Using if/elseif instead of switch because it's faster in PHP.
             if ($this->outputMode == static::IM_IN_SVG) {
-                $name = Elements::normalizeSvgAttribute($name);
+                $name = HTML5_Elements::normalizeSvgAttribute($name);
             } elseif ($this->outputMode == static::IM_IN_MATHML) {
-                $name = Elements::normalizeMathMlAttribute($name);
+                $name = HTML5_Elements::normalizeMathMlAttribute($name);
             }
 
             $this->wr(' ')->wr($name);
@@ -296,39 +355,37 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
         }
     }
 
-
-    protected function nonBooleanAttribute(\DOMAttr $attr)
-    {
+    protected function nonBooleanAttribute(\DOMAttr $attr) {
         $ele = $attr->ownerElement;
-        foreach($this->nonBooleanAttributes as $rule){
+        foreach ($this->nonBooleanAttributes as $rule) {
 
-            if(isset($rule['nodeNamespace']) && $rule['nodeNamespace']!==$ele->namespaceURI){
+            if (isset($rule['nodeNamespace']) && $rule['nodeNamespace'] !== $ele->namespaceURI) {
                 continue;
             }
-            if(isset($rule['attNamespace']) && $rule['attNamespace']!==$attr->namespaceURI){
+            if (isset($rule['attNamespace']) && $rule['attNamespace'] !== $attr->namespaceURI) {
                 continue;
             }
-            if(isset($rule['nodeName']) && !is_array($rule['nodeName']) && $rule['nodeName']!==$ele->localName){
+            if (isset($rule['nodeName']) && !is_array($rule['nodeName']) && $rule['nodeName'] !== $ele->localName) {
                 continue;
             }
-            if(isset($rule['nodeName']) && is_array($rule['nodeName']) && !in_array($ele->localName, $rule['nodeName'], true)){
+            if (isset($rule['nodeName']) && is_array($rule['nodeName']) && !in_array($ele->localName, $rule['nodeName'], true)) {
                 continue;
             }
-            if(isset($rule['attrName']) && !is_array($rule['attrName']) && $rule['attrName']!==$attr->localName){
+            if (isset($rule['attrName']) && !is_array($rule['attrName']) && $rule['attrName'] !== $attr->localName) {
                 continue;
             }
-            if(isset($rule['attrName']) && is_array($rule['attrName']) && !in_array($attr->localName, $rule['attrName'], true)){
+            if (isset($rule['attrName']) && is_array($rule['attrName']) && !in_array($attr->localName, $rule['attrName'], true)) {
                 continue;
             }
-            if(isset($rule['xpath'])){
+            if (isset($rule['xpath'])) {
 
                 $xp = $this->getXPath($attr);
-                if(isset($rule['prefixes'])){
-                    foreach($rule['prefixes'] as $nsPrefix => $ns){
+                if (isset($rule['prefixes'])) {
+                    foreach ($rule['prefixes'] as $nsPrefix => $ns) {
                         $xp->registerNamespace($nsPrefix, $ns);
                     }
                 }
-                if(!$xp->query($rule['xpath'], $attr->ownerElement)->length){
+                if (!$xp->query($rule['xpath'], $attr->ownerElement)->length) {
                     continue;
                 }
             }
@@ -339,8 +396,8 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
         return false;
     }
 
-    private function getXPath(\DOMNode $node){
-        if(!$this->xpath){
+    private function getXPath(\DOMNode $node) {
+        if (!$this->xpath) {
             $this->xpath = new \DOMXPath($node->ownerDocument);
         }
         return $this->xpath;
@@ -355,8 +412,7 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
      * @param \DOMNode $ele
      *            The element being written.
      */
-    protected function closeTag($ele)
-    {
+    protected function closeTag($ele) {
         if ($this->outputMode == static::IM_IN_HTML || $ele->hasChildNodes()) {
             $this->wr('</')->wr($this->traverser->isLocalElement($ele) ? $ele->localName : $ele->tagName)->wr('>');
         }
@@ -368,10 +424,9 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
      * @param string $text
      *            The string to put into the output.
      *
-     * @return \Masterminds\HTML5\Serializer\Traverser $this so it can be used in chaining.
+     * @return use HTML5_Serializer_Traverser $this so it can be used in chaining.
      */
-    protected function wr($text)
-    {
+    protected function wr($text) {
         fwrite($this->out, $text);
         return $this;
     }
@@ -379,10 +434,9 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
     /**
      * Write a new line character.
      *
-     * @return \Masterminds\HTML5\Serializer\Traverser $this so it can be used in chaining.
+     * @return use HTML5_Serializer_Traverser $this so it can be used in chaining.
      */
-    protected function nl()
-    {
+    protected function nl() {
         fwrite($this->out, PHP_EOL);
         return $this;
     }
@@ -416,11 +470,10 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
      *
      * @return string The encoded text.
      */
-    protected function enc($text, $attribute = false)
-    {
+    protected function enc($text, $attribute = false) {
 
         // Escape the text rather than convert to named character references.
-        if (! $this->encode) {
+        if (!$this->encode) {
             return $this->escape($text, $attribute);
         }
 
@@ -432,7 +485,7 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
         }         // If a version earlier than 5.4 html5 entities are not entirely handled.
         // This manually handles them.
         else {
-            return strtr($text, \Masterminds\HTML5\Serializer\HTML5Entities::$map);
+            return strtr($text, HTML5_Serializer_HTML5Entities::$map);
         }
     }
 
@@ -455,8 +508,7 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
      * @param boolean $attribute
      *            True if we are escaping an attrubute, false otherwise
      */
-    protected function escape($text, $attribute = false)
-    {
+    protected function escape($text, $attribute = false) {
 
         // Not using htmlspecialchars because, while it does escaping, it doesn't
         // match the requirements of section 8.5. For example, it doesn't handle
@@ -478,4 +530,5 @@ class OutputRules implements \Masterminds\HTML5\Serializer\RulesInterface
 
         return strtr($text, $replace);
     }
+
 }
