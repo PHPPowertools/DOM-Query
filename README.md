@@ -1,6 +1,6 @@
 # DOM Query Component
 
-***[PHPPowertools](https://github.com/PHPPowertools)*** is a web application framework for PHP > 5.3.
+***[PHPPowertools](https://github.com/PHPPowertools)*** is a web application framework for PHP >= 5.4.
 
 ***[PHPPowertools/DOM-Query](https://github.com/PHPPowertools/DOM-Query)*** is the first component of the ***PHPPowertools*** that has been released to the public.
 
