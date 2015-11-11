@@ -24,7 +24,8 @@ $s = $($('p + p'));
 ```
 ##### The DOM-Query way :
 ```php
-namespace PowerTools;
+namespace App;
+use \PowerTools\DOM_Query as DOM_Query;
 
 // Get file content
 $htmlcode = file_get_contents('https://github.com');
