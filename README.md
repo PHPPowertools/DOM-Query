@@ -10,39 +10,36 @@ The purpose of this component is to provide a ***[jQuery](http://jquery.com/)***
 
 ##### The jQuery way :
 ```js
-// Define your DOMCrawler
-$ = jQuery;
-
-// Passing a string (CSS selector)
+// Find the elements that match selector 'div.foo'
 $s = $('div.foo');
 
-// Passing an element object (DOM Element)
+// Pass an element object (DOM Element)
 $s = $(document.body);
 
-// Passing a jQuery object
+// Pass a jQuery object
 $s = $($('p + p'));
 ```
 ##### The DOM-Query way :
 ```php
 namespace App;
-use \PowerTools\DOM_Query as DOM_Query;
+use \PowerTools\DOM_Query;
 
 // Get file content
 $htmlcode = file_get_contents('https://github.com');
 
-// Define your DOMCrawler based on file string
+// Create a new DOM_Query instance, using a string as a source
 $H = new DOM_Query($htmlcode);
 
-// Define your DOMCrawler based on an existing DOM_Query instance
+// Create a new DOM_Query instance, using an existing DOM_Query instance as a source
 $H = new DOM_Query($H->select('body'));
 
-// Passing a string (CSS selector)
+// Find the elements that match selector 'div.foo'
 $s = $H->select('div.foo');
 
-// Passing an element object (DOM Element)
+// Pass an element object (DOM Element)
 $s = $H->select($documentBody);
 
-// Passing a DOM Query object
+// Pass a DOM Query instance
 $s = $H->select($H->select('p + p'));
 ```
 -----
