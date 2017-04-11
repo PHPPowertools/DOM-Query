@@ -1,5 +1,5 @@
 {
-    "name": "powertools/dom-query",
+    "name": "rkaiser0324/dom-query",
     "type": "library",
     "description": "PHP PowerTools DOM-Query Component",
     "homepage": "https://github.com/PHPPowertools/DOM-Query",
@@ -14,17 +14,12 @@
     "require": {
         "php": ">=5.4.0",
         "symfony/css-selector": "2.0",
-        "powertools/html5": "1.0"
+        "powertools/html5": "@dev"
     },
     "target-dir": "PowerTools/DOM-Query",
     "autoload": {
         "psr-0": {
             "PowerTools\\": "src/PowerTools/"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.2-dev"
         }
     }
 }
