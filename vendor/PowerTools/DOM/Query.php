@@ -342,6 +342,23 @@ class DOM_Query {
         return $this;
     }
 
+    public function hasClass($class) {
+        // http://api.jquery.com/hasClass/
+
+        $classFound = false;
+
+        $this->each(function($i, $element) use ($class, &$classFound) {
+            if (in_array(
+                    $class,
+                    explode(' ', $element->attr('class'))
+            )) {
+                $classFound = true;
+            }
+        });
+
+        return $classFound;
+    }
+
     public function removeAttr($key) {
         // http://api.jquery.com/removeAttr/
         $keys = explode(' ', $key);
