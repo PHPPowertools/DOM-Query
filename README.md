@@ -111,6 +111,7 @@ $sitefooter->wrap('<section><div class="footer-wrapper"></div></section>');
 - [x] [$selection.find](http://api.jquery.com/find/)
 - [x] [$selection.first](http://api.jquery.com/first/)
 - [x] [$selection.get](http://api.jquery.com/get/)
+- [x] [$selection.hasClass](http://api.jquery.com/hasclass/)
 - [x] [$selection.insertAfter](http://api.jquery.com/insertAfter/)
 - [x] [$selection.insertBefore](http://api.jquery.com/insertBefore/)
 - [x] [$selection.last](http://api.jquery.com/last/)
