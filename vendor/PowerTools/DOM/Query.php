@@ -573,7 +573,7 @@ class DOM_Query {
 
     public function get($index = false) {
         // http://api.jquery.com/get/
-        if ($index) {
+        if (is_int($index)) {
             if ($index < 0) {
                 return $this->nodes[count($this->nodes) + $index];
             }
