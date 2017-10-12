@@ -334,10 +334,12 @@ class DOM_Query {
             }
             foreach ($newclasses as $newclass) {
                 if (!in_array($newclass, $oldclasses)) {
-                    array_push($oldclasses, $newclass);
+                    // This is faster than calling array_push():
+                    // http://php.net/manual/en/function.array-push.php
+                    $oldclasses[] = $newclass;
                 }
             }
-            return implode(' ', $newclasses);
+            return implode(' ', $oldclasses);
         });
         return $this;
     }
