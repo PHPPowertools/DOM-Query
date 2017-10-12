@@ -310,6 +310,54 @@ class DOM_Query {
         return $this->_runGetterOrSetter(null, 'getAttribute', 'setAttribute', $key, $value, true);
     }
 
+    public function is($restriction = '') {
+        // http://api.jquery.com/is/
+
+        $is = false;
+
+        // Return if the current query has no results.
+        if (count($this->nodes) === 0) {
+            return $is;
+        }
+
+        switch (DOM_Helper::getType($restriction)) {
+            // If the restriction is a string, it's a selector.
+            case 'String':
+
+                // Return on empty selector string.
+                if (mb_strlen(trim($restriction)) === 0) {
+                    return $is;
+                }
+
+                // Loop through all nodes found in the current query.
+                foreach ($this->nodes as &$thisNode) {
+                    // Loop through all of the children of the parent of the
+                    // current node we're testing, filtered by the selector.
+                    foreach (
+                        $this->select($thisNode)
+                            ->parent()->children($restriction)->nodes
+                        as &$parentChildNode
+                    ) {
+                        if (
+                            $thisNode->isSameNode($parentChildNode)
+                        ) {
+                            // If one of the nodes is the current query node,
+                            // say we've found a match and break out of both
+                            // loops, to not run needlessly.
+
+                            $is = true;
+
+                            break 2;
+                        }
+                    }
+                }
+
+                break;
+        }
+
+        return $is;
+    }
+
     public function add($selector) {
         // http://api.jquery.com/add/
         $clone = new DOM_Query($this->DOM, $this->isHtml);
