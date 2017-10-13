@@ -320,8 +320,39 @@ class DOM_Query {
             return $is;
         }
 
+        // If more than one argument was passed, check if any of them are
+        // DOMElements and if so, create an array of the ones that are.
+        // http://api.jquery.com/is/#is-elements
+        $arguments = func_get_args();
+
+        foreach ($arguments as &$argument) {
+            if (DOM_Helper::getType($argument) === 'DOMElement') {
+                $nodes[] = &$argument;
+            }
+        }
+
+        if (count($nodes) > 0) {
+            $restriction = &$nodes;
+        }
+
+        switch (DOM_Helper::getType($restriction)) {
+            case 'DOMElement':
+                // If we only have one node passed, wrap it in an array to
+                // reduce duplicate code.
+                $restriction = array(&$restriction);
+
+                break;
+
+            case 'DOM_Query':
+                // If we're passed a DOM_Query, grab the array of nodes.
+                $restriction = &$restriction->nodes;
+
+                break;
+        }
+
         switch (DOM_Helper::getType($restriction)) {
             // If the restriction is a string, it's a selector.
+            // http://api.jquery.com/is/#is-selector
             case 'String':
 
                 // Return on empty selector string.
@@ -349,6 +380,33 @@ class DOM_Query {
 
                             break 2;
                         }
+                    }
+                }
+
+                break;
+
+            case 'Array':
+            case 'DOMNodeList':
+                // If the restriction is an array or DOMNodeList, iterate over
+                // it, breaking when one matches a node in our current query.
+                foreach ($restriction as &$node) {
+                    if (DOM_Helper::containsElement($this->nodes, $node)) {
+                        $is = true;
+
+                        break;
+                    }
+                }
+
+                break;
+
+            case 'Callable':
+                // If the restriction is a function, run it on every node in
+                // the query, breaking when one returns true.
+                foreach ($this->nodes as $i => &$node) {
+                    if ($restriction($i, $node) === true) {
+                        $is = true;
+
+                        break;
                     }
                 }
 
