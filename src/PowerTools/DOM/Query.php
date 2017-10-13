@@ -596,8 +596,16 @@ class DOM_Query {
             case 'DOM_Query':
                 $wrapper->nodes = $this->_importNodes($selector);
                 break;
-            default:
+            case 'DOMElement':
                 $wrapper->nodes = array($selector);
+                break;
+            default:
+                // Don't assume we've been passed an element node, as that can
+                // result in hard to pin down errors with _runGetter, for
+                // example, where it may be passed a null value as the first
+                // argument, and also have a single null value in the nodes
+                // array, which causes a fatal error.
+                $wrapper->nodes = array();
         }
         return $wrapper;
     }
